@@ -1,5 +1,3 @@
-package sample;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,6 +21,7 @@ public class Main extends Application {
         pane.setPrefSize(350, 1000);
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(140,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(pane);
+
 
 
         primaryStage.setTitle("Hello World");
