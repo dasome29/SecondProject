@@ -59,7 +59,7 @@ class Node {
     Node right;
 
 
-    public Node(String element){
+    Node(String element){
         this.element = element;
     }
 }
