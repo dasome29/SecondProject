@@ -1,7 +1,11 @@
 package BinaryTree;
 
+import LinkedArrayList.LinkedArrayList;
+
 public class BinaryTree{
+    private String[] file;
     private Node root = null;
+    private Node last = null;
 
 
     boolean isEmpty(){
@@ -36,7 +40,8 @@ public class BinaryTree{
 
     private Node insert(String element, Node current){
         if(current == null){
-            return new Node(element);
+            last = new Node(element);
+            return last;
         }
         else if(element.compareTo(current.element) < 0){
             current.left = insert(element, current.left);
@@ -48,19 +53,13 @@ public class BinaryTree{
         }
         return current;
     }
-}
+    public void setFile(String[] file){
+        this.file = file;
+    }
 
-
-
-
-class Node {
-    String element;
-    Node left;
-    Node right;
-
-
-    Node(String element){
-        this.element = element;
+    public Node getLast() {
+        return last;
     }
 }
+
 

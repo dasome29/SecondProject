@@ -5,9 +5,9 @@ package LinkedArrayList;
  * It can hold every type of object in it.
  * @param <T> T is the type of the list, it could be any Object.
  */
-class LinkedArrayList<T> {
-    private Node<T> head = null;
-    private Node<T> last = null;
+public class LinkedArrayList<T> {
+    private ListNode<T> head = null;
+    private ListNode<T> last = null;
     private int size = 0;
 
     /**
@@ -16,11 +16,11 @@ class LinkedArrayList<T> {
      */
     private void addFirst(T element) {
         if (head != null) {
-            Node<T> headx = new Node<T>(element, head, null);
+            ListNode<T> headx = new ListNode<T>(element, head, null);
             headx.setPrev(head);
             head = headx;
         } else {
-            head = new Node<>(element);
+            head = new ListNode<>(element);
             last = head;
         }
         size++;
@@ -29,11 +29,11 @@ class LinkedArrayList<T> {
      * This method adds a new object in the last position of the list, every time.
      * @param element Corresponds to the item that is entering the list.
      */
-    void addLast(T element) {
+    public void addLast(T element) {
         if (head == null) {
             addFirst(element);
         } else {
-            Node<T> newLast = new Node<T>(element, null, last);
+            ListNode<T> newLast = new ListNode<T>(element, null, last);
 
             last.setNext(newLast);
 
@@ -47,11 +47,11 @@ class LinkedArrayList<T> {
      * @param i The position of the object in the list.
      * @return Returns the
      */
-    T getElement(int i) {
+    public T getElement(int i) {
         if (head == null) {
             return null;
         } else {
-            Node<T> temp = head;
+            ListNode<T> temp = head;
             for (int count = 0; count < i && temp.getNext() != null; ++count) {
                 temp = temp.getNext();
             }
@@ -62,7 +62,7 @@ class LinkedArrayList<T> {
     /**
      * Takes the list to its initial state.
      */
-    void reset(){
+    public void reset(){
         head = null;
         size = 0;
     }
@@ -71,8 +71,8 @@ class LinkedArrayList<T> {
      * Deletes all the elements that were requested to delete.
      * @param element It's the element that will be deleted from the list.
      */
-    void deleteElement(T element){
-        Node<T> temp = head;
+    public void deleteElement(T element){
+        ListNode<T> temp = head;
         for (int count = 0; count < size; ++count) {
             if (temp.getValue().equals(element)){
                 if (count == 0){
@@ -98,7 +98,23 @@ class LinkedArrayList<T> {
         }
     }
 
-    int getSize() {
+    /**
+     * Changes the value of the node in the position "i".
+     * @param i The position of the node.
+     * @param element The new value of the node.
+     */
+    public void replace(int i, T element){
+        if (size>0){
+            ListNode<T> temp = head;
+            for (int count = 0; count < i && temp.getNext() != null; ++count) {
+                temp = temp.getNext();
+            }
+            temp.setValue(element);
+        }
+
+    }
+
+    public int getSize() {
         return size;
     }
 }

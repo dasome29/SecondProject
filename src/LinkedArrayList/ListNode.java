@@ -4,16 +4,16 @@ package LinkedArrayList;
  * This Class is where the elements of the LinkedArrayList Class are stored.
  * @param <T> The type of Object.
  */
-class Node<T> {
+class ListNode<T> {
     private T valuex;
-    private Node<T> nextx;
-    private Node<T> prevx;
+    private ListNode<T> nextx;
+    private ListNode<T> prevx;
 
     /**
      * Constructor that only takes the element to add.
      * @param value Element to store.
      */
-    Node(T value){
+    ListNode(T value){
         valuex = value;
         nextx = null;
         prevx = null;
@@ -25,7 +25,7 @@ class Node<T> {
      * @param next The next node.
      * @param prev The previous node.
      */
-    Node(T value, Node<T> next, Node<T> prev){
+    ListNode(T value, ListNode<T> next, ListNode<T> prev){
         valuex = value;
         nextx = next;
         prevx = prev;
@@ -34,16 +34,20 @@ class Node<T> {
     T getValue(){
         return valuex;
     }
-    Node<T> getNext(){
+
+    void setValue(T valuex) {
+        this.valuex = valuex;
+    }
+    ListNode<T> getNext(){
         return nextx;
     }
-    void setNext(Node<T> newNext){
+    void setNext(ListNode<T> newNext){
         nextx = newNext;
     }
-    Node<T> getPrev(){
+    ListNode<T> getPrev(){
         return prevx;
     }
-    void setPrev(Node<T> newPrev){
+    void setPrev(ListNode<T> newPrev){
         prevx = newPrev;
     }
 }
