@@ -1,11 +1,8 @@
 package GUI;
 
-import LinkedArrayList.LinkedArrayList;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,28 +13,19 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDFormContentStream;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.hwpf.HWPFDocument;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import FileReader.DocumentReader;
+
 
 import java.io.*;
-import java.util.Scanner;
 
 public class Main extends Application {
-    private static int sizeY =0;
     private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
+    private DocumentReader documentReader = new DocumentReader();
 
 
     @Override
@@ -58,11 +46,18 @@ public class Main extends Application {
         pane.getChildren().addAll(scrollPane);
 
 
-        Button addNewFile = new Button("Add");
+        Button addNewFile = new Button("Add File");
         addNewFile.setLayoutX(290);
         addNewFile.setLayoutY(850);
         addNewFile.setOnMouseClicked(NewFile);
         pane.getChildren().addAll(addNewFile);
+
+
+        Button addNewFolder = new Button("Add Folder");
+        addNewFolder.setLayoutX(150);
+        addNewFolder.setLayoutY(850);
+        addNewFolder.setOnMouseClicked(newFolder);
+        pane.getChildren().addAll(addNewFolder);
 
 
 
@@ -73,6 +68,20 @@ public class Main extends Application {
     }
 
 
+    EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setInitialDirectory(new File("/home"));
+            File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
+            documentReader.documentReader(seletedFiles);
+
+
+
+
+        }
+    };
+
 
     EventHandler<MouseEvent> NewFile = new EventHandler<MouseEvent>() {
         @Override
@@ -82,6 +91,7 @@ public class Main extends Application {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF files", "*.pdf"),
                     new FileChooser.ExtensionFilter("TXT files", "*.txt"), new FileChooser.ExtensionFilter("DOCX files", "*.docx"));
             File file = fileChooser.showOpenDialog(null);
+            documentReader.documentReader(file);
 
 
 
@@ -89,8 +99,6 @@ public class Main extends Application {
 
         }
     };
-
-
 
     private void addDocument(File file){
         Label label = new Label();

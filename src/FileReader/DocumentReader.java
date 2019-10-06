@@ -3,38 +3,67 @@ package FileReader;
 import BinaryTree.BinaryTree;
 import LinkedArrayList.LinkedArrayList;
 import BinaryTree.Node;
-
 import java.io.File;
 
 public class DocumentReader {
     private BinaryTree files = new BinaryTree();
-    private LinkedArrayList<String> document = new LinkedArrayList<String>();
+    private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
+    private LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
+    public DocumentReader() {
+    }
 
-    public DocumentReader(File file) throws NullPointerException{
-        try {
-            String[] text = DocumentFormat.verifyFormat(file);
-            files.setFile(text);
-            for (String s : text) {
-                document.addLast(s);
-            }
-            for (int i = 0; i < document.getSize(); i++) {
-                files.insert(document.getElement(i));
-                recurrences(files.getLast(), document.getElement(i), text);
-                document.deleteElement(document.getElement(i));
-                i = -1;
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
+
+    public void documentReader(File[] files) {
+        LinkedArrayList linkedArrayListFiles = DocumentFormat.filterExtensions(files);
+        for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
+            File file = (File) linkedArrayListFiles.getElement(i);
+            documentReader(file);
+
         }
     }
+
+    public void documentReader(File file) throws NullPointerException {
+        if (!documentAlreadyExist(file)) {
+            documents.addLast(file);
+            String[] text = DocumentFormat.verifyFormat(file);
+            if (text != null) {
+                files.setFile(text);
+                for (String s : text) {
+                    documentContent.addLast(s);
+                }
+                for (int i = 0; i < documentContent.getSize(); i++) {
+                    files.insert(documentContent.getElement(i));
+                    recurrences(files.getLast(), documentContent.getElement(i), text);
+                    documentContent.deleteElement(documentContent.getElement(i));
+                    i = -1;
+                }
+            }else{
+                System.out.println("El documento se encuentra vacio");
+            }
+        }else{
+            System.out.println("El documento ya existe en la biblioteca");
+        }
+    }
+
     private void recurrences(Node node, String word, String[] file) {
         for (int i = 0; i < file.length; i++) {
             if (word.equals(file[i])) {
                 node.getRecurrences().addLast(i);
             }
         }
+    }
+
+
+    private boolean documentAlreadyExist(File fileToAdd){
+        for(int i=0; i<documents.getSize(); i++){
+            File file = documents.getElement(i);
+            if(file.equals(fileToAdd)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

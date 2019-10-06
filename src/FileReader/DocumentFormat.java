@@ -1,8 +1,7 @@
 package FileReader;
 
+import LinkedArrayList.LinkedArrayList;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -13,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class DocumentFormat {
+    private static DocumentReader documentReader;
 
 
 
@@ -26,12 +26,34 @@ public class DocumentFormat {
             return docxDocument(file);
 
         }
-
         if(nameFile.substring(nameFile.length()-3).equals("txt")){
             return txtDocument(file);
 
         }
         return null;
+    }
+
+
+    public static LinkedArrayList filterExtensions(File[] files){
+        LinkedArrayList linkedArrayList = new LinkedArrayList();
+        for(int i=0; i< files.length; i++) {
+            File file = files[i];
+            String nameFile = file.getName();
+            if (nameFile.substring(nameFile.length() - 3).equals("pdf")) {
+                linkedArrayList.addLast(files[i]);
+
+            }
+
+            if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
+                linkedArrayList.addLast(files[i]);
+            }
+
+            if (nameFile.substring(nameFile.length() - 3).equals("txt")) {
+                linkedArrayList.addLast(files[i]);
+
+            }
+        }
+        return linkedArrayList;
     }
 
 
@@ -42,7 +64,6 @@ public class DocumentFormat {
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
             System.out.println(text);
-            return text;
 
         } catch (IOException e) {
             e.printStackTrace();
