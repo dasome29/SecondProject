@@ -18,25 +18,21 @@ public class BinaryTree{
 
     private boolean contains(String element, Node current){
         if(current == null){
-            System.out.println("Esta vacio");
             return false;
         }
         else if(element.compareTo(current.element) < 0){
-            System.out.println("Busqueda" + current.element);
             return contains(element, current.left);
         }
         else if(element.compareTo(current.element) > 0){
-            System.out.println("Busqueda" + current.element);
             return contains(element, current.right);
         }
         else{
-            System.out.println("Busqueda" + current.element);
             return true;
         }
     }
 
-    public Node get(String element){
-        return this.get(element, root);
+    public Node get(String name){
+        return this.get(name, root);
 
 
     }
@@ -85,16 +81,14 @@ public class BinaryTree{
         this.print(root);
     }
 
-    private void print(Node element){
-        if(element == null){
+    private void print(Node element) {
+        if (element == null) {
             System.out.println("Vacio");
 
+        } else {
+            System.out.println("                  " + element.element + "               ");
+            System.out.println(element.right.element + "    " + element.left.element);
         }
-        else{
-            System.out.println("                  " + element.element  + "               ");
-            System.out.println(element.right.element + "    "  +    element.left.element);
-        }
-
 
     }
 

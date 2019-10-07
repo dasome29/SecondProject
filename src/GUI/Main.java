@@ -1,7 +1,6 @@
 package GUI;
 
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +24,6 @@ import FileReader.DocumentReader;
 
 
 import java.io.*;
-import java.time.temporal.Temporal;
 
 public class Main extends Application {
     private static int posy = 10;
@@ -42,7 +40,7 @@ public class Main extends Application {
 
 
         //Se crea la barra de búsqueda de texto
-        SearchBar searchBar = new SearchBar(root);
+        SearchBar searchBar = new SearchBar(root, documentReader);
         searchBar.setSearchBar();
 
 
@@ -96,6 +94,9 @@ public class Main extends Application {
             File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
             documentReader.documentReader(seletedFiles);
 
+
+
+
         }
     };
 
@@ -113,6 +114,15 @@ public class Main extends Application {
         }
     };
 
+    private void addDocument(File file){
+        Label label = new Label();
+        label.setText("\n" + file.getName() + "\n");
+        label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80),CornerRadii.EMPTY, Insets.EMPTY)));
+        label.setLayoutX(10);
+        label.setLayoutY(posy);
+        documentsScroll.getChildren().addAll(label);
+        posy += 50;
+    }
 
 
     public static void main(String[] args) {

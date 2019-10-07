@@ -15,13 +15,14 @@ import javafx.scene.paint.Color;
 public class SearchBar{
     private Pane root;
     private Pane searchBar = new Pane();
-    private DocumentReader documentReader = new DocumentReader();
+    private DocumentReader documentReader;
     private Button searchButton;
     private TextField textField;
 
 
-    public SearchBar(Pane root){
+    public SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
+        this.documentReader = documentReader;
 
     }
 
@@ -49,11 +50,13 @@ public class SearchBar{
 
 
 
+
     private EventHandler<MouseEvent> searchWord = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             String string = textField.getText().trim();
-            System.out.println(" Contiene " +   string+ " " +   documentReader.files.contains(string));
+            System.out.println(documentReader.words.get("nombre"));
+            System.out.println(" Contiene " +   string+ " " +   documentReader.words.contains(string));
 
         }
     };
