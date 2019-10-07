@@ -33,7 +33,6 @@ public class DocumentFormat {
         return null;
     }
 
-
     public static LinkedArrayList filterExtensions(File[] files){
         LinkedArrayList linkedArrayList = new LinkedArrayList();
         for(int i=0; i< files.length; i++) {
@@ -41,10 +40,8 @@ public class DocumentFormat {
             String nameFile = file.getName();
             if (nameFile.substring(nameFile.length() - 3).equals("pdf")) {
                 linkedArrayList.addLast(files[i]);
-
             }
-
-            if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
+            if (nameFile.substring(nameFile.length() - 3).equals("doc")) {
                 linkedArrayList.addLast(files[i]);
             }
 
@@ -63,7 +60,7 @@ public class DocumentFormat {
             PDDocument pdDocument = new PDDocument().load(file);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
-            System.out.println(text);
+            return text;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,12 +71,12 @@ public class DocumentFormat {
 
     private static String[] docxDocument(File file) {
         try {
-            System.out.println("WORD");
             FileInputStream fileInputStream = new FileInputStream(file);
             XWPFDocument xwpfDocument = new XWPFDocument(fileInputStream);
 
             XWPFWordExtractor extractor = new XWPFWordExtractor(xwpfDocument);
             String[] text = extractor.getText().split(" ");
+            return text;
 
         }catch (FileNotFoundException e){
             e.printStackTrace();

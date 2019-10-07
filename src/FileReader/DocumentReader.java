@@ -6,19 +6,21 @@ import BinaryTree.Node;
 import java.io.File;
 
 public class DocumentReader {
-    private BinaryTree files = new BinaryTree();
+    public BinaryTree files = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
     private LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
-    public DocumentReader() {
-    }
+    public DocumentReader() {}
+
 
 
     public void documentReader(File[] files) {
         LinkedArrayList linkedArrayListFiles = DocumentFormat.filterExtensions(files);
+        System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
             File file = (File) linkedArrayListFiles.getElement(i);
+            System.out.println("El nombre del documento es" + file.getName());
             documentReader(file);
 
         }
@@ -29,7 +31,6 @@ public class DocumentReader {
             documents.addLast(file);
             String[] text = DocumentFormat.verifyFormat(file);
             if (text != null) {
-                files.setFile(text);
                 for (String s : text) {
                     documentContent.addLast(s);
                 }

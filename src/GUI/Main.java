@@ -1,12 +1,14 @@
 package GUI;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -20,12 +22,14 @@ import FileReader.DocumentReader;
 
 
 import java.io.*;
+import java.time.temporal.Temporal;
 
 public class Main extends Application {
     private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
     private DocumentReader documentReader = new DocumentReader();
+    private TextField textField;
 
 
     @Override
@@ -47,7 +51,7 @@ public class Main extends Application {
 
 
         Button addNewFile = new Button("Add File");
-        addNewFile.setLayoutX(290);
+        addNewFile.setLayoutX(275);
         addNewFile.setLayoutY(850);
         addNewFile.setOnMouseClicked(NewFile);
         pane.getChildren().addAll(addNewFile);
@@ -59,11 +63,32 @@ public class Main extends Application {
         addNewFolder.setOnMouseClicked(newFolder);
         pane.getChildren().addAll(addNewFolder);
 
+        Pane searchBar = new Pane();
+        searchBar.setPrefSize(650, 100);
+        searchBar.setLayoutX(352);
+        searchBar.setLayoutY(0);
+        searchBar.setBackground(new Background(new BackgroundFill(Color.web("#e7ebda"), CornerRadii.EMPTY, Insets.EMPTY)));
+        root.getChildren().add(searchBar);
+
+
+        Button searchButton = new Button("Search");
+        searchButton.setLayoutX(250);
+        searchButton.setLayoutY(30);
+        searchButton.setOnMouseClicked(searchWord);
+        searchBar.getChildren().add(searchButton);
+
+
+        textField = new TextField();
+        textField.setPrefSize(200, 30);
+        textField.setLayoutX(20);
+        textField.setLayoutY(30);
+        searchBar.getChildren().add(textField);
+
 
 
 
         primaryStage.setTitle("Text finder");
-        primaryStage.setScene(new Scene(root, 1500, 900));
+        primaryStage.setScene(new Scene(root, 1000, 900));
         primaryStage.show();
     }
 
@@ -93,7 +118,15 @@ public class Main extends Application {
             File file = fileChooser.showOpenDialog(null);
             documentReader.documentReader(file);
 
+        }
+    };
 
+
+    EventHandler<MouseEvent> searchWord = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            String string = textField.getText().trim();
+            System.out.println(" Contiene " + string + " " +   documentReader.files.contains(string));
 
 
 

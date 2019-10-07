@@ -3,7 +3,6 @@ package BinaryTree;
 import LinkedArrayList.LinkedArrayList;
 
 public class BinaryTree{
-    private String[] file;
     private Node root = null;
     private Node last = null;
 
@@ -13,7 +12,7 @@ public class BinaryTree{
     }
 
 
-    boolean contains(String element){
+    public boolean contains(String element){
         return this.contains(element, root);
     }
 
@@ -31,6 +30,30 @@ public class BinaryTree{
             return true;
         }
     }
+
+    public Node get(String element){
+        return this.get(element, root);
+
+
+    }
+
+
+    private Node get(String element, Node current){
+        if(current == null){
+            return null;
+        }
+        else if(element.compareTo(current.element) < 0){
+            return get(element, current.left);
+        }
+        else if(element.compareTo(current.element) > 0){
+            return get(element, current.right);
+        }
+        else{
+            return current;
+        }
+
+    }
+
 
 
     public void insert(String element){
@@ -53,9 +76,12 @@ public class BinaryTree{
         }
         return current;
     }
-    public void setFile(String[] file){
-        this.file = file;
+
+    public void print(){
+        System.out.println(root.element);
+        System.out.println(last.element);
     }
+
 
     public Node getLast() {
         return last;
