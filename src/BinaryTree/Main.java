@@ -9,7 +9,7 @@ public class Main {
         binaryTree.insert("Mora");
         binaryTree.insert("Godinez");
 
-        Node node = binaryTree.get("Godine");
-        System.out.println(node.element);
+        Node node = binaryTree.get("Godinez");
+        System.out.println(binaryTree.contains("Mora"));
     }
 }

@@ -6,15 +6,19 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class DocumentFormat {
     private static DocumentReader documentReader;
 
 
+    /**
+     * Metodo que verifica a cual de los tres formatos permitidos por la aplicacion pertecene el documento a agregar
+     * para llamar el metedo respectivo que realiza el parseo
+     * @param file documento a agregar
+     * @return Retorna un array que contiene todas las palabras
+     */
 
     public static String[] verifyFormat(File file){
         String nameFile = file.getName();
@@ -33,6 +37,13 @@ public class DocumentFormat {
         return null;
     }
 
+
+    /**
+     * Metodo que filtra las extensiones de los documentos que se encuentran en una carpeta, esto para cuando el usuario agregue
+     * una carpeta a la bilioteca con documentos de otros formatos
+     * @param files Arrays con los documentos de la carpeta
+     * @return Lista enlazada con los documentos con formato permitido
+     */
     public static LinkedArrayList filterExtensions(File[] files){
         LinkedArrayList linkedArrayList = new LinkedArrayList();
         for(int i=0; i< files.length; i++) {
@@ -54,6 +65,11 @@ public class DocumentFormat {
     }
 
 
+    /**
+     * Metodo que realiza el parseo de los documento con formato .pdf
+     * @param file Documentos a agregar
+     * @return Array con el texto parseado del documento
+     */
 
     private static String[] pdfDocument(File file){
         try {
@@ -69,6 +85,11 @@ public class DocumentFormat {
     }
 
 
+    /**
+     *  Metodo que realiza el parseo de los documento con formato .docx
+     * @param file Documentos a agregar* @return Array con el texto parseado del documento
+     * @return Array con el textp parseado del documento
+     */
     private static String[] docxDocument(File file) {
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
@@ -86,7 +107,30 @@ public class DocumentFormat {
         return null;
     }
 
-    private static String[] txtDocument(File file){
+
+    /**
+     * Metodo que realiza el parseo de los documento con formato .txt
+     * @param file Documentos a agregar* @return Array con el texto parseado del documento
+     * @return Array con el textp parseado del documento
+     */
+    private static String[] txtDocument(File file) {
+        try {
+            String text = new String();
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while (bufferedReader.ready()) {
+                text += bufferedReader.readLine() + " ";
+
+            }
+            String[] newText = text.split(" ");
+            return newText;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }
