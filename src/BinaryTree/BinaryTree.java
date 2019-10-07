@@ -31,8 +31,8 @@ public class BinaryTree{
         }
     }
 
-    public Node get(String element){
-        return this.get(element, root);
+    public Node get(String name){
+        return this.get(name, root);
 
 
     }

@@ -2,16 +2,18 @@ package FileReader;
 
 import BinaryTree.BinaryTree;
 import LinkedArrayList.LinkedArrayList;
-import BinaryTree.Node;
+
 import java.io.File;
 
 public class DocumentReader {
-    public BinaryTree files = new BinaryTree();
+    public BinaryTree words = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
     private LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
-    public DocumentReader() {}
+    public DocumentReader() {
+
+    }
 
 
 
@@ -35,8 +37,10 @@ public class DocumentReader {
                     documentContent.addLast(s);
                 }
                 for (int i = 0; i < documentContent.getSize(); i++) {
-                    files.insert(documentContent.getElement(i));
-                    recurrences(files.getLast(), documentContent.getElement(i), text);
+                    if (!words.contains(documentContent.getElement(i))) {
+                        words.insert(documentContent.getElement(i));
+                    }
+                    words.get(documentContent.getElement(i)).getRecurrences().addLast(file);
                     documentContent.deleteElement(documentContent.getElement(i));
                     i = -1;
                 }
@@ -47,15 +51,6 @@ public class DocumentReader {
             System.out.println("El documento ya existe en la biblioteca");
         }
     }
-
-    private void recurrences(Node node, String word, String[] file) {
-        for (int i = 0; i < file.length; i++) {
-            if (word.equals(file[i])) {
-                node.getRecurrences().addLast(i);
-            }
-        }
-    }
-
 
     private boolean documentAlreadyExist(File fileToAdd){
         for(int i=0; i<documents.getSize(); i++){

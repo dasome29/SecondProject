@@ -1,7 +1,6 @@
 package GUI;
 
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -22,7 +21,6 @@ import FileReader.DocumentReader;
 
 
 import java.io.*;
-import java.time.temporal.Temporal;
 
 public class Main extends Application {
     private static int posy = 10;
@@ -126,7 +124,7 @@ public class Main extends Application {
         @Override
         public void handle(MouseEvent mouseEvent) {
             String string = textField.getText().trim();
-            System.out.println(" Contiene " + string + " " +   documentReader.files.contains(string));
+            System.out.println(" Contiene " + string + " " +   documentReader.words.contains(string));
 
 
 
