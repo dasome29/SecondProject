@@ -81,7 +81,7 @@ public class Main extends Application {
 
         //Stage principal
         primaryStage.setTitle("Text finder");
-        primaryStage.setScene(new Scene(root, 1000, 900));
+        primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
     }
 
@@ -92,7 +92,9 @@ public class Main extends Application {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("/home"));
             File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
-            documentReader.documentReader(seletedFiles);
+            if(seletedFiles != null) {
+                documentReader.documentReader(seletedFiles);
+            }
 
 
 
@@ -109,7 +111,10 @@ public class Main extends Application {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF files", "*.pdf"),
                     new FileChooser.ExtensionFilter("TXT files", "*.txt"), new FileChooser.ExtensionFilter("DOCX files", "*.docx"));
             File selectedFile = fileChooser.showOpenDialog(null);
-            documentReader.documentReader(selectedFile);
+
+            if(selectedFile != null) {
+                documentReader.documentReader(selectedFile);
+            }
 
         }
     };
