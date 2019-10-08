@@ -55,7 +55,7 @@ public class SearchBar{
         @Override
         public void handle(MouseEvent mouseEvent) {
             String string = textField.getText().trim();
-            System.out.println(documentReader.words.get("nombre"));
+            System.out.println(documentReader.words.get(string));
             System.out.println(" Contiene " +   string+ " " +   documentReader.words.contains(string));
 
         }
