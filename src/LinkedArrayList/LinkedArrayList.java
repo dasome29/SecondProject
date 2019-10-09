@@ -125,8 +125,29 @@ public class LinkedArrayList<T> {
         }
 
     }
-    void insert(){
+    public void insert(int index, T element) {
+        if (index <= size && index >= 0) {
+            if (index == 0) {
+                this.addFirst(element);
+            }else if (index == size){
+                this.addLast(element);
+            }
+            else {
+                ListNode<T> newNode = new ListNode<T>(element);
+                ListNode<T> temp1 = head;
+                for (int i = 0; i < index && temp1.getNext() != null; i++) {
+                    temp1 = temp1.getNext();
+                }
+                ListNode<T> temp2 = temp1.getPrev();
 
+                newNode.setPrev(temp2);
+                temp2.setNext(newNode);
+
+                newNode.setNext(temp1);
+                temp1.setPrev(newNode);
+                size++;
+            }
+        }
     }
 
     public int getSize() {

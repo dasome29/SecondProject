@@ -22,7 +22,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-class SearchBar{
+public class SearchBar{
     private Pane root;
     private Pane searchBar = new Pane();
     private DocumentReader documentReader;
