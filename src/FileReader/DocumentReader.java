@@ -55,11 +55,13 @@ public class DocumentReader {
             String[] text = DocumentFormat.verifyFormat(file);
             if (text != null) {
                 for (String s : text) {
-                    s = s.replace(",", " ");
-                    s = s.replace(";", " ");
-                    s.trim();
-                    System.out.println(s);
-                    documentContent.addLast(s);
+                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
+                    .replace(")", " ").replace("\n", " ");
+                    s = s.trim();
+                    if(!s.equals("")) {
+                        System.out.println("|" + s + "|");
+                        documentContent.addLast(s);
+                    }
                 }
                 for (int i = 0; i < documentContent.getSize(); i++) {
                     if (!words.contains(documentContent.getElement(i))) {

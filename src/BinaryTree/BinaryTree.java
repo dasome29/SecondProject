@@ -77,21 +77,6 @@ public class BinaryTree{
         return current;
     }
 
-    public void print(){
-        this.print(root);
-    }
-
-    private void print(Node element) {
-        if (element == null) {
-            System.out.println("Vacio");
-
-        } else {
-            System.out.println("                  " + element.element + "               ");
-            System.out.println(element.right.element + "    " + element.left.element);
-        }
-
-    }
-
 
     public Node getLast() {
         return last;
