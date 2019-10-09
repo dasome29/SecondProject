@@ -2,6 +2,7 @@ package GUI;
 
 import BinaryTree.Node;
 import FileReader.DocumentReader;
+import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,17 +28,31 @@ class SearchBar{
     private DocumentReader documentReader;
     private Button searchButton;
     private TextField textField;
-    private LinkedArrayList<File> listOfWords;
-    private int posy = 120;
+    public static LinkedArrayList<File> listOfWords;
+    private static int posy = 10;
+    private static Pane searchingResultsPane;
+    private SortDocumentsBar sortDocumentsBar;
 
 
     SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
         this.documentReader = documentReader;
 
+
+
     }
 
     void setSearchBar() {
+
+        sortDocumentsBar = new SortDocumentsBar(root);
+
+
+        searchingResultsPane = new Pane();
+        searchingResultsPane.setLayoutX(352);
+        searchingResultsPane.setLayoutY(135);
+        searchingResultsPane.setPrefSize(550,800);
+        searchingResultsPane.setBackground(new Background(new BackgroundFill(Color.rgb(147,147,147), CornerRadii.EMPTY, Insets.EMPTY)));
+        root.getChildren().add(searchingResultsPane);
 
         searchBar = new Pane();
         searchBar.setPrefSize(550, 100);
@@ -51,6 +66,7 @@ class SearchBar{
         searchButton.setLayoutY(30);
         searchButton.setOnMouseClicked(searchWord);
         searchBar.getChildren().add(searchButton);
+
 
         textField = new TextField();
         textField.setPrefSize(200, 30);
@@ -80,14 +96,16 @@ class SearchBar{
     };
 
 
-    private void addDocumentsToScreen(){
+    public static void addDocumentsToScreen(){
+        posy = 10;
+        searchingResultsPane.getChildren().clear();
         for(int i=0; i<listOfWords.getSize(); i++){
             addDocument(listOfWords.getElement(i));
         }
     }
 
 
-    private void addDocument(File file){
+    private static void addDocument(File file){
         javafx.scene.control.Label label = new Label();
         label.setPrefWidth(400);
         label.setPrefHeight(80);
@@ -97,16 +115,16 @@ class SearchBar{
         label.setAlignment(Pos.TOP_CENTER);
         label.setOnMouseClicked(openDocument);
         label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(400);
+        label.setLayoutX(50);
         label.setLayoutY(posy);
-        root.getChildren().addAll(label);
+        searchingResultsPane.getChildren().addAll(label);
         posy += 100;
     }
 
 
 
 
-    private EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
+    private static EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             new Thread(() -> {
