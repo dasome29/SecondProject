@@ -113,6 +113,9 @@ public class LinkedArrayList<T> {
         }
 
     }
+    void insert(){
+
+    }
 
     public int getSize() {
         return size;
