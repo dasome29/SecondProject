@@ -114,6 +114,7 @@ public class DocumentFormat {
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.showAndWait();
         }catch (IOException e){
+            System.out.println("No funca");
             e.printStackTrace();
         }
         return null;

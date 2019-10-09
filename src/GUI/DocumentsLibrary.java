@@ -1,5 +1,5 @@
 package GUI;
 
-public class DocumentsLibrary {
+import javafx.scene.layout.Pane;
 
-}
+public class DocumentsLibrary { }

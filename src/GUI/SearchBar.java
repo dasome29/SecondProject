@@ -29,7 +29,6 @@ public class SearchBar{
     private Button searchButton;
     private TextField textField;
     public static LinkedArrayList<File> listOfWords;
-    private static int posy = 10;
     private static Pane searchingResultsPane;
     private SortDocumentsBar sortDocumentsBar;
 
@@ -96,33 +95,6 @@ public class SearchBar{
     };
 
 
-    public static void addDocumentsToScreen(){
-        posy = 10;
-        searchingResultsPane.getChildren().clear();
-        for(int i=0; i<listOfWords.getSize(); i++){
-            addDocument(listOfWords.getElement(i));
-        }
-    }
-
-
-    private static void addDocument(File file){
-        javafx.scene.control.Label label = new Label();
-        label.setPrefWidth(400);
-        label.setPrefHeight(80);
-        label.setUserData(file);
-        label.setText("\n" + file.getName() + "\n" + file.length() +  " Mb" + "\n");
-        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
-        label.setAlignment(Pos.TOP_CENTER);
-        label.setOnMouseClicked(openDocument);
-        label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(50);
-        label.setLayoutY(posy);
-        searchingResultsPane.getChildren().addAll(label);
-        posy += 100;
-    }
-
-
-
 
     private static EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
         @Override
@@ -137,6 +109,34 @@ public class SearchBar{
             }).start();
         }
     };
+
+
+    public static void addDocumentsToScreen(){
+        int posy = 10;
+        searchingResultsPane.getChildren().clear();
+        for(int i=0; i<listOfWords.getSize(); i++){
+            addDocument(listOfWords.getElement(i), posy);
+            posy +=100;
+        }
+    }
+
+
+    private static void addDocument(File file, int posy){
+        javafx.scene.control.Label label = new Label();
+        label.setPrefWidth(400);
+        label.setPrefHeight(80);
+        label.setUserData(file);
+        label.setText("\n" + file.getName() + "\n" + file.length() +  " Mb" + "\n");
+        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
+        label.setAlignment(Pos.TOP_CENTER);
+        label.setOnMouseClicked(openDocument);
+        label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80), CornerRadii.EMPTY, Insets.EMPTY)));
+        label.setLayoutX(50);
+        label.setLayoutY(posy);
+        searchingResultsPane.getChildren().addAll(label);
+    }
+
+
 
 
 }

@@ -6,10 +6,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import org.apache.poi.hwpf.sprm.SprmIterator;
+
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 
 
 public class SortDocumentsBar {
@@ -74,12 +77,12 @@ public class SortDocumentsBar {
                         SearchBar.addDocumentsToScreen();
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
 
-
                     }
                     if (sortBySize.isSelected()) {
                         System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
                     }
                     if (sortByDate.isSelected()) {
+                        SortByDate(SearchBar.listOfWords);
                         System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
                     }
                 }catch (NullPointerException e){
@@ -93,44 +96,50 @@ public class SortDocumentsBar {
 
 
     private void SortByName(LinkedArrayList<File> list){
-        quickSort(list, 0, list.getSize()-1);
-
     }
 
 
-    private void quickSort(LinkedArrayList<File> list, int start, int end){
-        if(start < end){
-            int newpos = quickSortAux(list, start, end);
 
-            quickSort(list, start, newpos +1);
-            quickSort(list, newpos +1, end);
-        }
+    private LinkedArrayList<File> quickSort(LinkedArrayList<File> list, int start, int end){
+        return quickSortAux(list, start, end);
 
     }
 
-    private int quickSortAux(LinkedArrayList<File> list, int start, int end){
-        File filePivot = list.getElement(end);
-        int i = (start-1);
+    private LinkedArrayList<File> quickSortAux(LinkedArrayList<File> list, int start, int end) {
+        return null;
+    }
 
-        for(int j= start; j<end; j++){
-            File file = list.getElement(j);
-            if(file.getName().compareTo(filePivot.getName()) <=0){
-                i++;
+
+    /**
+     * Este método es el encargado de ordenar los resultados de la búsqueda utilizando la fecha de creación como
+     * referencia. Utiliza el algotritmo de ordenamiento BubbleSort
+     * @param list lista a ordenar
+     */
+    private void SortByDate(LinkedArrayList<File> list){
+        for(int i=0; i < list.getSize(); i++) {
+            for (int current = 0; current < list.getSize() - 1; current++) {
+                try {
+                    BasicFileAttributes attributes;
+                    BasicFileAttributes attributes2;
+                    attributes = Files.readAttributes(list.getElement(current).toPath(), BasicFileAttributes.class);
+                    FileTime file1Time = attributes.creationTime();
+                    attributes2 = Files.readAttributes(list.getElement(current+1).toPath(), BasicFileAttributes.class);
+                    FileTime file1Time2 = attributes2.creationTime();
+                    System.out.println(list.getElement(current).getName() + " " +  file1Time + "          " + list.getElement(current+1).getName() + " "  + file1Time2);
+                    System.out.println(file1Time.compareTo(file1Time2));
+                    if(file1Time.compareTo(file1Time2) < 0){
+                        File temp = list.getElement(current);
+                        list.replace(current, list.getElement(current+1));
+                        list.replace(current+1, temp);
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
             }
-
-            File fileSwap = list.getElement(i);
-            list.add(list.getElement(j), i);
-            list.add(fileSwap, j);
         }
-
-        File fileSwap = list.getElement(i+1);
-        list.add(list.getElement(end), i+1);
-        list.add(fileSwap, end);
-
-        return i+1;
+        SearchBar.addDocumentsToScreen();
 
     }
 
 
 }
-
