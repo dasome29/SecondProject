@@ -12,7 +12,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class SearchBar{
+class SearchBar{
     private Pane root;
     private Pane searchBar = new Pane();
     private DocumentReader documentReader;
@@ -20,13 +20,13 @@ public class SearchBar{
     private TextField textField;
 
 
-    public SearchBar(Pane root, DocumentReader documentReader){
+    SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
         this.documentReader = documentReader;
 
     }
 
-    public void setSearchBar() {
+    void setSearchBar() {
 
         searchBar = new Pane();
         searchBar.setPrefSize(650, 100);
