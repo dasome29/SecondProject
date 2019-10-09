@@ -1,6 +1,9 @@
 package FileReader;
 
 import LinkedArrayList.LinkedArrayList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Region;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -79,7 +82,11 @@ public class DocumentFormat {
             return text;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty File", ButtonType.OK);
+            alert.setHeaderText("Problema con el documento que desea agregar");
+            alert.setContentText("El documento se encuentra vacío, por favor intentelo nuevamente");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
         }
         return null;
     }
@@ -101,6 +108,11 @@ public class DocumentFormat {
 
         }catch (FileNotFoundException e){
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty File", ButtonType.OK);
+            alert.setHeaderText("Problema con el documento que desea agregar");
+            alert.setContentText("El documento se encuentra vacío, por favor intentelo nuevamente");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -125,9 +137,13 @@ public class DocumentFormat {
             String[] newText = text.split(" ");
             return newText;
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty File", ButtonType.OK);
+            alert.setHeaderText("Problema con el documento que desea agregar");
+            alert.setContentText("El documento se encuentra vacío, por favor intentelo nuevamente");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+
             e.printStackTrace();
         }
 

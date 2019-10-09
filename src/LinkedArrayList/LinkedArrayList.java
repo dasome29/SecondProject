@@ -10,6 +10,18 @@ public class LinkedArrayList<T> {
     private ListNode<T> last = null;
     private int size = 0;
 
+
+    public void add(T element, int index){
+        if(size > 0){
+            ListNode temp = head;
+            for(int i=0; i< index; i++){
+                temp = temp.getNext();
+            }
+            temp.setValue(element);
+        }
+
+    }
+
     /**
      * This method adds a new object in the first position of the list, every time.
      * @param element Corresponds to the item that is entering the list.
