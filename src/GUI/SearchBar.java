@@ -1,15 +1,15 @@
 package GUI;
 
 import BinaryTree.Node;
+import FileReader.DocumentFormat;
 import FileReader.DocumentReader;
 import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +28,11 @@ public class SearchBar{
     private DocumentReader documentReader;
     private Button searchButton;
     private TextField textField;
+    private ToggleGroup searchBy;
+    private RadioButton searchByWord;
+    private RadioButton searchByPhase;
+    private String word;
+    private String phase;
     public static LinkedArrayList<File> listOfWords;
     private static Pane searchingResultsPane;
     private SortDocumentsBar sortDocumentsBar;
@@ -53,12 +58,29 @@ public class SearchBar{
         searchingResultsPane.setBackground(new Background(new BackgroundFill(Color.rgb(147,147,147), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(searchingResultsPane);
 
+
+
         searchBar = new Pane();
         searchBar.setPrefSize(550, 100);
         searchBar.setLayoutX(352);
         searchBar.setLayoutY(0);
         searchBar.setBackground(new Background(new BackgroundFill(Color.web("#e7ebda"), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(searchBar);
+
+
+        searchBy = new ToggleGroup();
+
+        searchByWord = new RadioButton("By word");
+        searchByWord.setLayoutX(350);
+        searchByWord.setToggleGroup(searchBy);
+        searchByWord.setLayoutY(25);
+
+        searchByPhase = new RadioButton("By Phase");
+        searchByPhase.setToggleGroup(searchBy);
+        searchByPhase.setLayoutX(350);
+        searchByPhase.setLayoutY(50);
+
+        searchBar.getChildren().addAll(searchByWord, searchByPhase);
 
         searchButton = new Button("Search");
         searchButton.setLayoutX(250);
@@ -80,10 +102,17 @@ public class SearchBar{
         @Override
         public void handle(MouseEvent mouseEvent) {
             try {
-                String string = textField.getText().trim();
-                listOfWords = documentReader.words.get(string).getRecurrences();
-                System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
-                addDocumentsToScreen();
+                if(searchByWord.isSelected()) {
+                    String string = textField.getText().trim();
+                    listOfWords = documentReader.words.get(string).getRecurrences();
+                    System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
+                    addDocumentsToScreen(string);
+                }
+                if(searchByPhase.isSelected()){
+                    String[] string = textField.getText().split(" ");
+                    listOfWords = documentReader.words.get(string[0]).getRecurrences();
+                    searchPhase(string);
+                }
             }catch (NullPointerException e){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Content", ButtonType.OK);
                 alert.setHeaderText("No existe ninguna palabra o frase para buscar");
@@ -93,6 +122,46 @@ public class SearchBar{
             }
         }
     };
+
+
+    private void searchPhase(String[] phase){
+        int posy = 10;
+        for(int i=0; i < listOfWords.getSize(); i++){
+            File file = listOfWords.getElement(i);
+            String[] text = DocumentFormat.verifyFormat(file);
+            if(searchPhase(text, phase)){
+                System.out.println("La frase se encuentra en alguno de los documentos");
+                Results results=  new Results(searchingResultsPane, file, word, posy);
+                posy +=100;
+            }
+
+        }
+    }
+    private boolean searchPhase(String[] text, String[] phase){
+        int index = 0;
+        for(int i=0; i< text.length; i++){
+            if(text[i].equals(phase[index]) ){
+                if(index == phase.length -1){
+                    return true;
+                }else {
+                    index++;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public static void addDocumentsToScreen(String word) {
+        int posy = 10;
+        for(int i=0; i< listOfWords.getSize(); i++){
+            File file = listOfWords.getElement(i);
+            Results results=  new Results(searchingResultsPane, file, word, posy );
+            posy += 250;
+        }
+
+    }
+
 
 
 
@@ -111,30 +180,7 @@ public class SearchBar{
     };
 
 
-    public static void addDocumentsToScreen(){
-        int posy = 10;
-        searchingResultsPane.getChildren().clear();
-        for(int i=0; i<listOfWords.getSize(); i++){
-            addDocument(listOfWords.getElement(i), posy);
-            posy +=100;
-        }
-    }
 
-
-    private static void addDocument(File file, int posy){
-        javafx.scene.control.Label label = new Label();
-        label.setPrefWidth(400);
-        label.setPrefHeight(80);
-        label.setUserData(file);
-        label.setText("\n" + file.getName() + "\n" + file.length() +  " Mb" + "\n");
-        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
-        label.setAlignment(Pos.TOP_CENTER);
-        label.setOnMouseClicked(openDocument);
-        label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(50);
-        label.setLayoutY(posy);
-        searchingResultsPane.getChildren().addAll(label);
-    }
 
 
 

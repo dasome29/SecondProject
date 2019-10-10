@@ -55,7 +55,7 @@ public class DocumentFormat {
             if (nameFile.substring(nameFile.length() - 3).equals("pdf")) {
                 linkedArrayList.addLast(files[i]);
             }
-            if (nameFile.substring(nameFile.length() - 3).equals("doc")) {
+            if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
                 linkedArrayList.addLast(files[i]);
             }
 
@@ -78,6 +78,7 @@ public class DocumentFormat {
         try {
             PDDocument pdDocument = new PDDocument().load(file);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
+            pdfTextStripper.setWordSeparator("");
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
             return text;
 

@@ -1,5 +1,6 @@
 package FileReader;
 
+import GUI.Results;
 import GUI.SearchBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.beans.value.ChangeListener;
@@ -74,7 +75,6 @@ public class SortDocumentsBar {
                     if (sortByName.isSelected()) {
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
                         SortByName(SearchBar.listOfWords);
-                        SearchBar.addDocumentsToScreen();
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
 
                     }
@@ -137,7 +137,6 @@ public class SortDocumentsBar {
                 }
             }
         }
-        SearchBar.addDocumentsToScreen();
 
     }
 
