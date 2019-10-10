@@ -8,8 +8,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import java.io.*;
 
+import java.io.*;
+import java.util.Scanner;
 
 public class DocumentFormat {
 
@@ -45,19 +46,18 @@ public class DocumentFormat {
      * @return Lista enlazada con los documentos con formato permitido
      */
     public static LinkedArrayList filterExtensions(File[] files){
-        LinkedArrayList linkedArrayList = new LinkedArrayList();
-        for(int i=0; i< files.length; i++) {
-            File file = files[i];
+        LinkedArrayList<File> linkedArrayList = new LinkedArrayList<File>();
+        for (File file : files) {
             String nameFile = file.getName();
             if (nameFile.substring(nameFile.length() - 3).equals("pdf")) {
-                linkedArrayList.addLast(files[i]);
+                linkedArrayList.addLast(file);
             }
             if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
-                linkedArrayList.addLast(files[i]);
+                linkedArrayList.addLast(file);
             }
 
             if (nameFile.substring(nameFile.length() - 3).equals("txt")) {
-                linkedArrayList.addLast(files[i]);
+                linkedArrayList.addLast(file);
 
             }
         }

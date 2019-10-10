@@ -56,9 +56,9 @@ public class DocumentReader {
             if (text != null) {
                 for (String s : text) {
                     s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
-                    .replace(")", " ").replace("\n", " ");
+                            .replace(")", " ").replace("\n", " ");
                     s = s.trim();
-                    if(!s.equals("")) {
+                    if (!s.equals("")) {
                         System.out.println("|" + s + "|");
                         documentContent.addLast(s);
                     }
@@ -71,12 +71,25 @@ public class DocumentReader {
                     documentContent.deleteElement(documentContent.getElement(i));
                     i = -1;
                 }
-            }else{
+            } else {
                 System.out.println("El documento se encuentra vacio");
             }
-        }else{
+        } else {
             System.out.println("El documento ya existe en la biblioteca");
         }
+    }
+
+    void deleteFile(File file) {
+        String[] text = DocumentFormat.verifyFormat(file);
+        assert text != null;
+        for (String s : text){
+            words.get(s).getRecurrences().deleteElement(file);
+            if (words.get(s).getRecurrences().getSize()==0){
+                words.remove(s);
+            }
+        }
+        documents.deleteElement(file);
+
     }
 
     /**
@@ -93,4 +106,21 @@ public class DocumentReader {
         }
         return false;
     }
+
+
+    private void addDocumentToLibrary(File file) {
+        Label label = new Label();
+        label.setPrefWidth(310);
+        label.setPrefHeight(50);
+        label.setText("\n" + file.getName() + "\n");
+        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
+        label.setAlignment(Pos.TOP_CENTER);
+        label.setBackground(new Background(new BackgroundFill(Color.rgb(140, 80, 80), CornerRadii.EMPTY, Insets.EMPTY)));
+        label.setLayoutX(10);
+        //label.setLayoutY(posy);
+        //documentScroll.getChildren().addAll(label);
+        //posy += 75;
+    }
+
+
 }

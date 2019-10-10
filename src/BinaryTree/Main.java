@@ -1,23 +1,19 @@
 package BinaryTree;
 
-import GUI.SearchBar;
 import LinkedArrayList.LinkedArrayList;
-
-import java.text.Collator;
-import java.util.Collections;
 
 public class Main {
 
     public static void main(String[] args){
-        LinkedArrayList<Integer> list = new LinkedArrayList<Integer>();
-        list.addLast(1);
-        list.addLast(6);
-        list.addLast(8);
-        list.addLast(7);
-        list.addLast(5);
-
-
-        list.replace(2, 254);
+        BinaryTree test = new BinaryTree();
+//        LinkedArrayList<Integer> list = new LinkedArrayList<Integer>();
+//        list.addLast(1);
+//        list.addLast(6);
+//        list.addLast(8);
+//        list.addLast(7);
+//        list.addLast(5);
+//
+//        list.insert(0, 4);
 
         String name = "Prueba2";
         String name2 = "zaragoza";

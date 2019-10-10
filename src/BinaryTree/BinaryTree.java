@@ -77,6 +77,35 @@ public class BinaryTree{
         return current;
     }
 
+    public void remove(String element){
+        remove(element, root);
+    }
+    private Node remove(String element, Node c){
+        if( c == null){
+            return null;
+        }
+        if (element.compareTo(c.element)<0){
+            c. left = remove(element, c.left);
+        }
+        else if(element.compareTo(c.element) > 0){
+            c.right = remove(element, c.right);
+        }
+        else if(c.left != null && c.right != null){
+            c.element = findMin(c.right).element;
+            c = c.right = remove(c.element, c.right);
+        }else{
+            c= c.left != null ? c.left : c.right;
+        }
+        return c;
+    }
+    private Node findMin(Node c){
+        if (c.left.element.compareTo(c.right.element) > 0 ){
+            return findMin(c.left);
+        }else if (c.left.element.compareTo(c.right.element) < 0 ){
+            return findMin(c.right);
+        }
+        return c;
+    }
 
     public Node getLast() {
         return last;

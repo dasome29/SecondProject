@@ -16,7 +16,7 @@ public class LinkedArrayList<T> {
 
     public void add(T element, int index){
         if(size > 0){
-            ListNode temp = head;
+            ListNode<T> temp = head;
             for(int i=0; i< index; i++){
                 temp = temp.getNext();
             }
