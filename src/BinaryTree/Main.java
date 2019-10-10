@@ -22,11 +22,9 @@ public class Main {
         String name = "Prueba2";
         String name2 = "zaragoza";
 
-        int[] e = new int[] { 2,4,7,6,8};
-        insertionSort(e);
-        for(int i : e){
-            System.out.println(i);
-        }
+
+        int c = 10 > 20 ? 30 : 40;
+        System.out.println(c);
 
 
         System.out.println(name.compareTo(name2));

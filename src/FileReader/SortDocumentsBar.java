@@ -82,7 +82,8 @@ public class SortDocumentsBar {
                         System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
                     }
                     if (sortByDate.isSelected()) {
-                        SortByDate(SearchBar.listOfWords);
+                        //SortByDate(SearchBar.listOfWords);
+                        SortByDate(SearchBar.resultsList);
                         System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
                     }
                 }catch (NullPointerException e){
@@ -115,20 +116,14 @@ public class SortDocumentsBar {
      * referencia. Utiliza el algotritmo de ordenamiento BubbleSort
      * @param list lista a ordenar
      */
-    private void SortByDate(LinkedArrayList<File> list){
+    private void SortByDate(LinkedArrayList<Results> list){
         for(int i=0; i < list.getSize(); i++) {
             for (int current = 0; current < list.getSize() - 1; current++) {
                 try {
-                    BasicFileAttributes attributes;
-                    BasicFileAttributes attributes2;
-                    attributes = Files.readAttributes(list.getElement(current).toPath(), BasicFileAttributes.class);
-                    FileTime file1Time = attributes.creationTime();
-                    attributes2 = Files.readAttributes(list.getElement(current+1).toPath(), BasicFileAttributes.class);
-                    FileTime file1Time2 = attributes2.creationTime();
-                    System.out.println(list.getElement(current).getName() + " " +  file1Time + "          " + list.getElement(current+1).getName() + " "  + file1Time2);
-                    System.out.println(file1Time.compareTo(file1Time2));
-                    if(file1Time.compareTo(file1Time2) < 0){
-                        File temp = list.getElement(current);
+                    FileTime fileTime = getFileTime(list.getElement(i).file);
+                    FileTime file1Time2 = getFileTime(list.getElement(i+1).file);
+                    if(fileTime.compareTo(file1Time2) > 0){
+                        Results temp = list.getElement(current);
                         list.replace(current, list.getElement(current+1));
                         list.replace(current+1, temp);
                     }
@@ -137,7 +132,15 @@ public class SortDocumentsBar {
                 }
             }
         }
+        SearchBar.updatePositions();
 
+    }
+
+    private FileTime getFileTime(File file) throws IOException {
+        BasicFileAttributes attributes;
+        attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+        FileTime file1Time = attributes.creationTime();
+        return file1Time;
     }
 
 

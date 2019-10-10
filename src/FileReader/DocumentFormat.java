@@ -8,13 +8,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import java.io.*;
-import java.util.Scanner;
+
 
 public class DocumentFormat {
-    private static DocumentReader documentReader;
-
 
     /**
      * Metodo que verifica a cual de los tres formatos permitidos por la aplicacion pertecene el documento a agregar
@@ -104,6 +101,8 @@ public class DocumentFormat {
             XWPFDocument xwpfDocument = new XWPFDocument(fileInputStream);
 
             XWPFWordExtractor extractor = new XWPFWordExtractor(xwpfDocument);
+
+
             String[] text = extractor.getText().split(" ");
             return text;
 

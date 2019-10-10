@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -34,8 +35,10 @@ public class SearchBar{
     private String word;
     private String phase;
     public static LinkedArrayList<File> listOfWords;
+    public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
     private SortDocumentsBar sortDocumentsBar;
+    public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
     SearchBar(Pane root, DocumentReader documentReader){
@@ -52,12 +55,19 @@ public class SearchBar{
 
 
         searchingResultsPane = new Pane();
-        searchingResultsPane.setLayoutX(352);
-        searchingResultsPane.setLayoutY(135);
+        searchingResultsPane.setLayoutX(0);
+        searchingResultsPane.setLayoutY(0);
         searchingResultsPane.setPrefSize(550,800);
         searchingResultsPane.setBackground(new Background(new BackgroundFill(Color.rgb(147,147,147), CornerRadii.EMPTY, Insets.EMPTY)));
-        root.getChildren().add(searchingResultsPane);
 
+
+        scrollPaneResults = new ScrollPane();
+        scrollPaneResults.setLayoutX(352);
+        scrollPaneResults.setLayoutY(135);
+        scrollPaneResults.setPrefSize(550, 800);
+        scrollPaneResults.setBackground(new Background(new BackgroundFill(Color.rgb(147,147,147), CornerRadii.EMPTY, Insets.EMPTY)));
+        scrollPaneResults.setContent(searchingResultsPane);
+        root.getChildren().add(scrollPaneResults);
 
 
         searchBar = new Pane();
@@ -103,12 +113,14 @@ public class SearchBar{
         public void handle(MouseEvent mouseEvent) {
             try {
                 if(searchByWord.isSelected()) {
+                    resultsList.reset();
                     String string = textField.getText().trim();
                     listOfWords = documentReader.words.get(string).getRecurrences();
                     System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
                     addDocumentsToScreen(string);
                 }
                 if(searchByPhase.isSelected()){
+                    resultsList.reset();
                     String[] string = textField.getText().split(" ");
                     listOfWords = documentReader.words.get(string[0]).getRecurrences();
                     searchPhase(string);
@@ -132,6 +144,7 @@ public class SearchBar{
             if(searchPhase(text, phase)){
                 System.out.println("La frase se encuentra en alguno de los documentos");
                 Results results=  new Results(searchingResultsPane, file, word, posy);
+                resultsList.addLast(results);
                 posy +=100;
             }
 
@@ -157,28 +170,24 @@ public class SearchBar{
         for(int i=0; i< listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
             Results results=  new Results(searchingResultsPane, file, word, posy );
-            posy += 250;
+            resultsList.addLast(results);
+            posy += 280;
         }
 
     }
 
+    public static void updatePositions(){
+        int posy = 10;
+        for(int i=0; i <= resultsList.getSize(); i++){
+            Results results = resultsList.getElement(i);
+            results.pane.setLayoutY(posy);
+            posy += 28;
+            if(posy > searchingResultsPane.getHeight()){
+                searchingResultsPane.setPrefHeight(posy +150);
+            }
 
-
-
-    private static EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            new Thread(() -> {
-                try {
-                    File file = new File(((File) ((Label) event.getSource()).getUserData()).getPath());
-                    System.out.println("Abre documento");
-                    Desktop.getDesktop().open(file);
-                } catch (IOException e) {
-                }
-            }).start();
         }
-    };
-
+    }
 
 
 

@@ -72,9 +72,6 @@ public class Main extends Application {
         pane.getChildren().addAll(addNewFolder);
 
 
-
-
-
         //Stage principal
         primaryStage.setTitle("Text finder");
         primaryStage.setScene(new Scene(root, 900, 900));

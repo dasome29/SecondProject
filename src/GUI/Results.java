@@ -1,11 +1,17 @@
 package GUI;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -15,10 +21,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class Results {
-    private Pane pane;
+    public Pane pane;
     private Pane searchingResultsPane;
     private TextArea textArea;
-    private File file;
+    public File file;
     private String word;
     private int posy;
 
@@ -31,20 +37,54 @@ public class Results {
 
 
         pane = new Pane();
-        pane.setPrefSize(300, 150);
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(0,0,0), CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setPrefSize(520, 250);
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(144,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
         pane.setLayoutX(10);
         pane.setLayoutY(posy);
 
+        Label label = new Label(file.getName());
+        label.setLayoutX(3);
+        label.setLayoutY(5);
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        label.setTextFill(Color.rgb(255,255,255));
+        pane.getChildren().add(label);
+
+
+        Button button = new Button("Abrir");
+        button.setLayoutX(450);
+        button.setLayoutY(2);
+        button.setOnMouseClicked(openDocument);
+        button.setUserData(file);
+        pane.getChildren().addAll(button);
+
 
         textArea = new TextArea(file.getName());
-        textArea.setPrefSize(300, 125);
-        textArea.setLayoutY(25);
+        textArea.setPrefSize(520, 220);
+        textArea.setEditable(false);
+        textArea.setLayoutY(30);
         pane.getChildren().add(textArea);
 
         searchingResultsPane.getChildren().add(pane);
 
 
     }
+
+
+
+    private EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            new Thread(() -> {
+                try {
+                    System.out.println(event.getSource());
+                    File file = new File(((File) ((Button) event.getSource()).getUserData()).getPath());
+                    System.out.println("Abre documento");
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
+                }
+            }).start();
+        }
+    };
+
 
 }

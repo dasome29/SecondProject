@@ -93,21 +93,4 @@ public class DocumentReader {
         }
         return false;
     }
-
-
-    private void addDocumentToLibrary(File file){
-        Label label = new Label();
-        label.setPrefWidth(310);
-        label.setPrefHeight(50);
-        label.setText("\n" + file.getName() + "\n");
-        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
-        label.setAlignment(Pos.TOP_CENTER);
-        label.setBackground(new Background(new BackgroundFill(Color.rgb(140,80,80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(10);
-        //label.setLayoutY(posy);
-        //documentScroll.getChildren().addAll(label);
-        //posy += 75;
-    }
-
-
 }
