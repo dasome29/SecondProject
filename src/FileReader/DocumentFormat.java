@@ -48,19 +48,18 @@ public class DocumentFormat {
      * @return Lista enlazada con los documentos con formato permitido
      */
     public static LinkedArrayList filterExtensions(File[] files){
-        LinkedArrayList linkedArrayList = new LinkedArrayList();
-        for(int i=0; i< files.length; i++) {
-            File file = files[i];
+        LinkedArrayList<File> linkedArrayList = new LinkedArrayList<File>();
+        for (File file : files) {
             String nameFile = file.getName();
             if (nameFile.substring(nameFile.length() - 3).equals("pdf")) {
-                linkedArrayList.addLast(files[i]);
+                linkedArrayList.addLast(file);
             }
-            if (nameFile.substring(nameFile.length() - 3).equals("doc")) {
-                linkedArrayList.addLast(files[i]);
+            if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
+                linkedArrayList.addLast(file);
             }
 
             if (nameFile.substring(nameFile.length() - 3).equals("txt")) {
-                linkedArrayList.addLast(files[i]);
+                linkedArrayList.addLast(file);
 
             }
         }
@@ -127,7 +126,7 @@ public class DocumentFormat {
      */
     private static String[] txtDocument(File file) {
         try {
-            String text = new String();
+            String text = "";
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while (bufferedReader.ready()) {
