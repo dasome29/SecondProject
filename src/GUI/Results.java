@@ -22,9 +22,9 @@ import java.io.IOException;
 
 public class Results {
     public Pane pane;
+    public File file;
     private Pane searchingResultsPane;
     private TextArea textArea;
-    public File file;
     private String word;
     private int posy;
 

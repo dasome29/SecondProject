@@ -98,11 +98,9 @@ public class DocumentFormat {
     private static String[] docxDocument(File file) {
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
+            System.out.println("Entra");
             XWPFDocument xwpfDocument = new XWPFDocument(fileInputStream);
-
             XWPFWordExtractor extractor = new XWPFWordExtractor(xwpfDocument);
-
-
             String[] text = extractor.getText().split(" ");
             return text;
 
@@ -114,7 +112,6 @@ public class DocumentFormat {
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.showAndWait();
         }catch (IOException e){
-            System.out.println("No funca");
             e.printStackTrace();
         }
         return null;

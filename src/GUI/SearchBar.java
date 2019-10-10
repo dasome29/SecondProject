@@ -167,24 +167,29 @@ public class SearchBar{
 
     public static void addDocumentsToScreen(String word) {
         int posy = 10;
+        searchingResultsPane.getChildren().clear();
         for(int i=0; i< listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
             Results results=  new Results(searchingResultsPane, file, word, posy );
             resultsList.addLast(results);
             posy += 280;
+            if(posy > searchingResultsPane.getHeight()){
+                searchingResultsPane.setPrefHeight(posy +150);
+            }
         }
 
     }
 
     public static void updatePositions(){
         int posy = 10;
-        for(int i=0; i <= resultsList.getSize(); i++){
+        for(int i=0; i < resultsList.getSize(); i++){
             Results results = resultsList.getElement(i);
+            System.out.println(results.file.getName() + "   " + posy);
             results.pane.setLayoutY(posy);
-            posy += 28;
             if(posy > searchingResultsPane.getHeight()){
                 searchingResultsPane.setPrefHeight(posy +150);
             }
+            posy += 280;
 
         }
     }
