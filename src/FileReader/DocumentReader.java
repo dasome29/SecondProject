@@ -27,7 +27,6 @@ public class DocumentReader {
 
     /**
      * Metodo el cual es llamado en el momento en que el usuario agrega una carpeta de documentos
-     *
      * @param files Array con todos los documentos de la carpeta
      */
 
@@ -45,7 +44,6 @@ public class DocumentReader {
 
     /**
      * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
-     *
      * @param file documento a agrega
      */
     public void documentReader(File file) {
@@ -93,7 +91,6 @@ public class DocumentReader {
 
     /**
      * Verifica si el documentos que se quiere agregar ya existe en la biblioteca
-     *
      * @param fileToAdd documento a agregar
      * @return true en caso de que ya existe, false en caso contrario
      */

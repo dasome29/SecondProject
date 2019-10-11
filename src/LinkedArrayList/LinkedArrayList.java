@@ -1,5 +1,8 @@
 package LinkedArrayList;
 
+import BinaryTree.Node;
+import org.w3c.dom.NodeList;
+
 /**
  * This Class is the main storage for this project.
  * It can hold every type of object in it.
@@ -21,6 +24,7 @@ public class LinkedArrayList<T> {
         }
 
     }
+
 
     /**
      * This method adds a new object in the first position of the list, every time.
@@ -148,6 +152,17 @@ public class LinkedArrayList<T> {
                 size++;
             }
         }
+    }
+
+    public Object get(T object){
+        ListNode temp = head;
+        while(temp != null){
+            if(temp.equals(object)){
+                return temp.getValue();
+            }
+        }
+        return null;
+
     }
 
     public int getSize() {

@@ -77,6 +77,7 @@ public class DocumentFormat {
         try {
             PDDocument pdDocument = new PDDocument().load(file);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
+            pdfTextStripper.setWordSeparator("");
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
             return text;
 
@@ -113,6 +114,7 @@ public class DocumentFormat {
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.showAndWait();
         }catch (IOException e){
+            System.out.println("No funca");
             e.printStackTrace();
         }
         return null;
