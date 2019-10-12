@@ -1,28 +1,22 @@
 package GUI;
 
-import BinaryTree.Node;
 import FileReader.DocumentFormat;
 import FileReader.DocumentReader;
 import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
- public class SearchBar{
+
+public class SearchBar{
     private Pane root;
     private Pane searchBar = new Pane();
     private DocumentReader documentReader;
@@ -30,10 +24,11 @@ import java.io.IOException;
     private TextField textField;
     private ToggleGroup searchBy;
     private RadioButton searchByWord;
-    private RadioButton searchByPhase;
+    private RadioButton searchByPhrase;
     private String word;
     private String phase;
     public static LinkedArrayList<File> listOfWords;
+    public static LinkedArrayList<Integer> listOfSize;
     public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
     private SortDocumentsBar sortDocumentsBar;
@@ -84,12 +79,12 @@ import java.io.IOException;
         searchByWord.setToggleGroup(searchBy);
         searchByWord.setLayoutY(25);
 
-        searchByPhase = new RadioButton("By Phase");
-        searchByPhase.setToggleGroup(searchBy);
-        searchByPhase.setLayoutX(350);
-        searchByPhase.setLayoutY(50);
+        searchByPhrase = new RadioButton("By Phase");
+        searchByPhrase.setToggleGroup(searchBy);
+        searchByPhrase.setLayoutX(350);
+        searchByPhrase.setLayoutY(50);
 
-        searchBar.getChildren().addAll(searchByWord, searchByPhase);
+        searchBar.getChildren().addAll(searchByWord, searchByPhrase);
 
         searchButton = new Button("Search");
         searchButton.setLayoutX(250);
@@ -118,7 +113,7 @@ import java.io.IOException;
                     System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
                     addDocumentsToScreen(string);
                 }
-                if(searchByPhase.isSelected()){
+                if(searchByPhrase.isSelected()){
                     resultsList.reset();
                     String[] string = textField.getText().split(" ");
                     listOfWords = documentReader.words.get(string[0]).getRecurrences();

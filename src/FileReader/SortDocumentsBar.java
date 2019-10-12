@@ -63,34 +63,31 @@ public class SortDocumentsBar {
         sortByDate.setLayoutY(10);
         sortByDate.setText("Date ");
 
-
         sortPane.getChildren().addAll(sortByName, sortByDate, sortBySize);
 
     }
 
     private void setEventToggleGroup(){
-        toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                try {
-                    if (sortByName.isSelected()) {
-                        System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
-                        SortByName(SearchBar.listOfWords);
-                        System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (sortByName.isSelected()) {
+                    System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
+                    SortByName(SearchBar.listOfWords);
+                    System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
 
-                    }
-                    if (sortBySize.isSelected()) {
-                        System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
-                    }
-                    if (sortByDate.isSelected()) {
-                        //SortByDate(SearchBar.listOfWords);
-                        SortByDate(SearchBar.resultsList);
-                        System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                    System.out.println("La lista se encuntra vacia");
                 }
+                if (sortBySize.isSelected()) {
+                    SortBySize();
+                    System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
+                }
+                if (sortByDate.isSelected()) {
+                    //SortByDate(SearchBar.listOfWords);
+                    SortByDate(SearchBar.resultsList);
+                    System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
+                System.out.println("La lista se encuntra vacia");
             }
         });
 
@@ -143,5 +140,66 @@ public class SortDocumentsBar {
         FileTime file1Time = attributes.creationTime();
         return file1Time;
     }
-
+    private void SortBySize(){
+        SearchBar.resultsList = radixSort(SearchBar.resultsList);
+        SearchBar.updatePositions();
+    }
+    private static LinkedArrayList<Results> radixSort(LinkedArrayList<Results> list){
+        int length = String.valueOf(getMax(list)).length();
+        for (int i = 1; i <= length; i++) {
+            list = sort(positions(createList(10), (int) Math.pow(10, i), list), (int) Math.pow(10, i), list);
+        }
+        return list;
+    }
+    private static LinkedArrayList<Integer> createList(int num){
+        LinkedArrayList<Integer> linkedArrayList = new LinkedArrayList<Integer>();
+        for (int i = 0; i < num; i++) {
+            linkedArrayList.addLast(0);
+        }
+        return linkedArrayList;
+    }
+    private static LinkedArrayList<Integer> sumList(LinkedArrayList<Integer> nums){
+        int count = 0;
+        for (int i = 0; i < nums.getSize(); i++) {
+            count +=nums.getElement(i);
+            nums.replace(i, count);
+        }
+        return nums;
+    }
+    private static int getMax(LinkedArrayList<Results> list){
+        int max = 0;
+        for (int i = 0; i < list.getSize(); i++) {
+            if(list.getElement(i).size>max){
+                max=list.getElement(i).size;
+            }
+        }
+        return max;
+    }
+    private static LinkedArrayList<Integer> positions(LinkedArrayList<Integer> nums, int module, LinkedArrayList<Results> list){
+        for (int i = 0; i < list.getSize(); i++) {
+            int x = (int) (list.getElement(i).size%module/Math.pow(10, (Math.log10(module)-1)));
+            int y = nums.getElement((int) (((list.getElement(i).size%module)/Math.pow(10, (Math.log10(module)-1)))))+1;
+            nums.replace(x, y);
+        }
+        return nums;
+    }
+    private static LinkedArrayList<Results> sort(LinkedArrayList<Integer> nums, int module, LinkedArrayList<Results> list){
+        LinkedArrayList<Integer> temp = createList(list.getSize());
+        LinkedArrayList<Integer> newNums = sumList(nums);
+        for (int i = list.getSize()-1; i >= 0; i--) {
+            int num = (int) (list.getElement(i).size%module/Math.pow(10, (Math.log10(module)-1)));
+            newNums.replace(num,newNums.getElement(num)-1 );
+            temp.replace(newNums.getElement(num),list.getElement(i).size);
+        }
+        LinkedArrayList<Results> newList = new LinkedArrayList<Results>();
+        for (int i = 0; i < temp.getSize(); i++) {
+            for (int j = 0; j < list.getSize(); j++) {
+                if (temp.getElement(i) == list.getElement(j).size){
+                    newList.addLast(list.getElement(j));
+                    list.delete(j);
+                }
+            }
+        }
+        return newList;
+    }
 }
