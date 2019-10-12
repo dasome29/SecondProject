@@ -43,6 +43,11 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
     //Thanks for using https://jar-download.com
 
+    // https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans
+    compile group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '2.3.0'
+
+
+
     // runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     
 }
