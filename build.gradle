@@ -31,14 +31,17 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.poi/openxml4j
     compile group: 'org.apache.poi', name: 'openxml4j', version: '1.0-beta'
 
-    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.7-beta3'
+//    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+//    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.7-beta3'
 
     // https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad
     compile group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.0.1-FINAL'
 
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml-schemas
     compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.17'
+
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+    //Thanks for using https://jar-download.com
 
     // runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
     

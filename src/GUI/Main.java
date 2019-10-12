@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +33,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         root = new Pane();
+        Label test = new Label("PENE");
+
+
+        test.setTranslateX(20);
+        test.setTranslateY(20);
 
 
 
@@ -54,6 +60,7 @@ public class Main extends Application {
         documentsScroll = new Pane();
         documentsScroll.setPrefSize(350, 830);
         documentsScroll.setBackground(new Background(new BackgroundFill(Color.rgb(140,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
+        documentsScroll.getChildren().addAll(test);
         ScrollPane scrollPane = new ScrollPane(documentsScroll);
         pane.getChildren().addAll(scrollPane);
 
@@ -76,6 +83,7 @@ public class Main extends Application {
         primaryStage.setTitle("Text finder");
         primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
+        Document document =new  Document(pane);
     }
 
 

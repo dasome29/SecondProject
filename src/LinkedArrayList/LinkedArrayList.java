@@ -120,14 +120,13 @@ public class LinkedArrayList<T> {
      * @param element The new value of the node.
      */
     public void replace(int i, T element){
-        if (size>0){
+        if (i<size){
             ListNode<T> temp = head;
             for (int count = 0; count < i && temp.getNext() != null; ++count) {
                 temp = temp.getNext();
             }
             temp.setValue(element);
         }
-
     }
     public void insert(int index, T element) {
         if (index <= size && index >= 0) {
