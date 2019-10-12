@@ -8,12 +8,12 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import java.io.*;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+
 
 public class DocumentFormat {
+    private static DocumentReader documentReader;
+
 
     /**
      * Metodo que verifica a cual de los tres formatos permitidos por la aplicacion pertecene el documento a agregar
@@ -55,6 +55,7 @@ public class DocumentFormat {
             }
             if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
                 linkedArrayList.addLast(file);
+
             }
 
             if (nameFile.substring(nameFile.length() - 3).equals("txt")) {
@@ -76,6 +77,7 @@ public class DocumentFormat {
         try {
             PDDocument pdDocument = new PDDocument().load(file);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
+            pdfTextStripper.setWordSeparator("");
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
             return text;
 
@@ -125,7 +127,7 @@ public class DocumentFormat {
      */
     private static String[] txtDocument(File file) {
         try {
-            String text = new String();
+            String text = "";
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while (bufferedReader.ready()) {

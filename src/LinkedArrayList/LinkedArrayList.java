@@ -120,14 +120,13 @@ public class LinkedArrayList<T> {
      * @param element The new value of the node.
      */
     public void replace(int i, T element){
-        if (size>0){
+        if (i<size){
             ListNode<T> temp = head;
             for (int count = 0; count < i && temp.getNext() != null; ++count) {
                 temp = temp.getNext();
             }
             temp.setValue(element);
         }
-
     }
     public void insert(int index, T element) {
         if (index <= size && index >= 0) {
@@ -153,16 +152,32 @@ public class LinkedArrayList<T> {
             }
         }
     }
-
-    public Object get(T object){
-        ListNode temp = head;
-        while(temp != null){
-            if(temp.equals(object)){
-                return temp.getValue();
+    public void delete(int i) {
+        if (i < size && size>0) {
+            ListNode<T> temp = head;
+            for (int count = 0; count < i && temp.getNext() != null; ++count) {
+                temp = temp.getNext();
             }
+            if (temp==head && size>1){
+                temp.getNext().setPrev(null);
+                head = temp.getNext();
+                temp.setNext(null);
+            }
+            else if(temp == last && size>1){
+                temp.getPrev().setNext(null);
+                last = temp.getPrev();
+                temp.setPrev(null);
+            }
+            else if (size==1){
+                head = null;
+                last = null;
+            }
+            else{
+                temp.getPrev().setNext(temp.getNext());
+                temp.getNext().setPrev(temp.getPrev());
+            }
+            size--;
         }
-        return null;
-
     }
 
     public int getSize() {

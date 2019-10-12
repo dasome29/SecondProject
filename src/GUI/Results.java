@@ -27,6 +27,7 @@ public class Results {
     private TextArea textArea;
     private String word;
     private int posy;
+    public int size;
 
 
     public Results(Pane searchingResultsPane, File file, String word, int posy){
@@ -34,6 +35,9 @@ public class Results {
         this.file = file;
         this.posy = posy;
         this.word = word;
+
+        this.size = (int)file.getTotalSpace();
+        System.out.println(size);
 
 
         pane = new Pane();
