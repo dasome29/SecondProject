@@ -59,7 +59,6 @@ public class DocumentReader {
                             .replace(")", " ").replace("\n", " ");
                     s = s.trim();
                     if (!s.equals("")) {
-                        System.out.println("|" + s + "|");
                         documentContent.addLast(s);
                     }
                 }

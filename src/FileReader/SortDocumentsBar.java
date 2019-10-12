@@ -16,6 +16,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
 
+/**
+ * Clase que permite el ordenamiento de los resultados
+ */
 public class SortDocumentsBar {
     private Pane root;
     private Pane sortPane;
@@ -25,8 +28,10 @@ public class SortDocumentsBar {
     private RadioButton sortByDate;
 
 
-
-
+    /**
+     * Constructir
+     * @param root Panel root
+     */
     public SortDocumentsBar(Pane root){
         this.root = root;
 
@@ -67,6 +72,10 @@ public class SortDocumentsBar {
 
     }
 
+    /**
+     * Método facade que llama los métodos correspondiente dependiendo de la opción elegida para ordenar los resultados
+     */
+
     private void setEventToggleGroup(){
         toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -74,7 +83,7 @@ public class SortDocumentsBar {
                 try {
                     if (sortByName.isSelected()) {
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
-                        SortByName(SearchBar.listOfWords);
+                        SortByName(SearchBar.resultsList);
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
 
                     }
@@ -96,18 +105,63 @@ public class SortDocumentsBar {
     }
 
 
-    private void SortByName(LinkedArrayList<File> list){
+    /**
+     * Método que es llamado para ordenar los resultados por su nombre
+     * @param list lista de ordenar
+     */
+    private void SortByName(LinkedArrayList<Results> list){
+        quickSort(list, 0, list.getSize()-1);
+        SearchBar.updatePositions();
+
     }
 
 
+    /**
+     * Método que implementa el algoritmo de ordenamiento QuickSort
+     * @param list lista a ordenar
+     * @param start indice de inicio
+     * @param end indice final
+     */
 
-    private LinkedArrayList<File> quickSort(LinkedArrayList<File> list, int start, int end){
-        return quickSortAux(list, start, end);
+    private void quickSort(LinkedArrayList<Results> list, int start, int end){
+        if (start < end) {
+            int pos = quickSortAux(list, start, end);
 
+            quickSort(list, start, pos - 1);
+            quickSort(list,pos +1, end);
+
+        }
     }
 
-    private LinkedArrayList<File> quickSortAux(LinkedArrayList<File> list, int start, int end) {
-        return null;
+
+    /**
+     * Método auxiliar del quicksort
+     * @param list lista a ordenar
+     * @param start indice de inicio
+     * @param end indice de final
+     * @return nuevo indice
+     */
+
+
+    private int quickSortAux(LinkedArrayList<Results> list, int start, int end) {
+
+        File pivote = list.getElement(end).file;
+        int i = start-1;
+        for(int j=start; j<end; j++){
+            File file = list.getElement(j).file;
+            if(file.getName().compareTo(pivote.getName()) < 0){
+                i++;
+                Results temp = list.getElement(i);
+                list.replace(i, list.getElement(j));
+                list.replace(j, temp);
+            }
+        }
+        Results temp = list.getElement(i+1);
+        list.replace(i+1, list.getElement(end));
+        list.replace(end, temp);
+
+        return i+1;
+
     }
 
 
@@ -135,6 +189,13 @@ public class SortDocumentsBar {
         SearchBar.updatePositions();
 
     }
+
+    /**
+     * Este método retorna la fecha de creación del archivo que ingresa por parámetros
+     * @param file archivo para obtener la fehca
+     * @return FileTime
+     * @throws IOException
+     */
 
     private FileTime getFileTime(File file) throws IOException {
         BasicFileAttributes attributes;

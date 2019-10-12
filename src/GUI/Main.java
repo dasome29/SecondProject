@@ -34,7 +34,6 @@ public class Main extends Application {
         root = new Pane();
 
 
-
         //Se crea la barra de búsqueda de texto
         SearchBar searchBar = new SearchBar(root, documentReader);
         searchBar.setSearchBar();
@@ -46,6 +45,7 @@ public class Main extends Application {
         pane.setPrefSize(350, 900);
         pane.setBackground(new Background(new BackgroundFill(Color.rgb(140,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
         root.getChildren().add(pane);
+
 
 
         //--------------------------------------------------------------------------------------------------------------//

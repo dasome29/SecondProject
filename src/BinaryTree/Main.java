@@ -4,7 +4,7 @@ import LinkedArrayList.LinkedArrayList;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         BinaryTree test = new BinaryTree();
 //        LinkedArrayList<Integer> list = new LinkedArrayList<Integer>();
 //        list.addLast(1);
@@ -18,25 +18,15 @@ public class Main {
         String name = "Prueba2";
         String name2 = "zaragoza";
 
+        test.insert("hola");
+        test.insert("me");
+        test.insert("cago");
+        test.insert("en");
+        test.insert("la");
+        test.insert("puta");
 
         int c = 10 > 20 ? 30 : 40;
         System.out.println(c);
 
-
-        System.out.println(name.compareTo(name2));
-    }
-
-    public static void insertionSort(int[] A) {
-        int in = 0;
-        int out = 0;
-        for (out = 1; out < A.length; out++) {
-            int temp = A[out];
-            in = out;
-            while (in > 0 && A[in - 1] >= temp) {
-                A[in] = A[in - 1];
-                --in;
-            }
-            A[in] = temp;
-        }
     }
 }

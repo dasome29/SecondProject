@@ -11,6 +11,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class DocumentFormat {
 
@@ -75,7 +76,6 @@ public class DocumentFormat {
         try {
             PDDocument pdDocument = new PDDocument().load(file);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
-            pdfTextStripper.setWordSeparator("");
             String[] text = pdfTextStripper.getText(pdDocument).split(" ");
             return text;
 
