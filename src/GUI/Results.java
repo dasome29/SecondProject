@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Results {
-    public Pane pane;
+    Pane pane;
     public File file;
     private Pane searchingResultsPane;
     private TextArea textArea;
@@ -30,7 +30,7 @@ public class Results {
     public int size;
 
 
-    public Results(Pane searchingResultsPane, File file, String word, int posy){
+    Results(Pane searchingResultsPane, File file, String word, int posy){
         this.searchingResultsPane = searchingResultsPane;
         this.file = file;
         this.posy = posy;
@@ -73,22 +73,15 @@ public class Results {
 
     }
 
-
-
-    private EventHandler<MouseEvent> openDocument = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            new Thread(() -> {
-                try {
-                    System.out.println(event.getSource());
-                    File file = new File(((File) ((Button) event.getSource()).getUserData()).getPath());
-                    System.out.println("Abre documento");
-                    Desktop.getDesktop().open(file);
-                } catch (IOException e) {
-                }
-            }).start();
+    private EventHandler<MouseEvent> openDocument = event -> new Thread(() -> {
+        try {
+            System.out.println(event.getSource());
+            File file = new File(((File) ((Button) event.getSource()).getUserData()).getPath());
+            System.out.println("Abre documento");
+            Desktop.getDesktop().open(file);
+        } catch (IOException ignored) {
         }
-    };
+    }).start();
 
 
 }

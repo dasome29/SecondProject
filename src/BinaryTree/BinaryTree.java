@@ -6,7 +6,6 @@ public class BinaryTree{
     private Node root = null;
     private Node last = null;
 
-
     boolean isEmpty(){
         return root == null;
     }

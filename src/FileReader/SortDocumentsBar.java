@@ -137,8 +137,7 @@ public class SortDocumentsBar {
     private FileTime getFileTime(File file) throws IOException {
         BasicFileAttributes attributes;
         attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        FileTime file1Time = attributes.creationTime();
-        return file1Time;
+        return attributes.creationTime();
     }
     private void SortBySize(){
         SearchBar.resultsList = radixSort(SearchBar.resultsList);
@@ -202,4 +201,6 @@ public class SortDocumentsBar {
         }
         return newList;
     }
+
+
 }

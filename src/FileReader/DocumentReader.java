@@ -2,7 +2,6 @@ package FileReader;
 
 import BinaryTree.BinaryTree;
 import LinkedArrayList.LinkedArrayList;
-import BinaryTree.Node;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,8 +11,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.hslf.record.CString;
 
 import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -25,6 +29,7 @@ public class DocumentReader {
     private LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
+
     /**
      * Metodo el cual es llamado en el momento en que el usuario agrega una carpeta de documentos
      * @param files Array con todos los documentos de la carpeta
@@ -32,10 +37,10 @@ public class DocumentReader {
 
 
     public void documentReader(File[] files) {
-        LinkedArrayList linkedArrayListFiles = DocumentFormat.filterExtensions(files);
+        LinkedArrayList<File> linkedArrayListFiles = DocumentFormat.filterExtensions(files);
         System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
-            File file = (File) linkedArrayListFiles.getElement(i);
+            File file = linkedArrayListFiles.getElement(i);
             documentReader(file);
 
         }
@@ -49,24 +54,27 @@ public class DocumentReader {
     public void documentReader(File file) {
         if (!documentAlreadyExist(file)) {
             documents.addLast(file);
-            String[] text = DocumentFormat.verifyFormat(file);
+            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
             if (text != null) {
-                for (String s : text) {
-                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
-                            .replace(")", " ").replace("\n", " ");
-                    s = s.trim();
-                    if (!s.equals("")) {
-                        System.out.println("|" + s + "|");
-                        documentContent.addLast(s);
+                for (int i = 0; i < text.getSize(); i++) {
+                    for (String s : text.getElement(i)) {
+                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
+                                .replace(")", " ").replace("\n", " ");
+                        s = s.trim();
+                        if (!s.equals("")) {
+//                            System.out.println("|" + s + "|");
+                            documentContent.addLast(s);
+                        }
                     }
                 }
-                for (int i = 0; i < documentContent.getSize(); i++) {
-                    if (!words.contains(documentContent.getElement(i))) {
-                        words.insert(documentContent.getElement(i));
+                for (int j = 0; j < documentContent.getSize(); j++) {
+                    String word = documentContent.getElement(j);
+                    if (!words.contains(word)) {
+                        words.insert(word);
                     }
-                    words.get(documentContent.getElement(i)).getRecurrences().addLast(file);
-                    documentContent.deleteElement(documentContent.getElement(i));
-                    i = -1;
+                    words.get(word).setDocument(file, recurrences(text, word));
+                    documentContent.deleteElement(word);
+                    j = -1;
                 }
             } else {
                 System.out.println("El documento se encuentra vacio");
@@ -76,18 +84,18 @@ public class DocumentReader {
         }
     }
 
-    void deleteFile(File file) {
-        String[] text = DocumentFormat.verifyFormat(file);
-        assert text != null;
-        for (String s : text){
-            words.get(s).getRecurrences().deleteElement(file);
-            if (words.get(s).getRecurrences().getSize()==0){
-                words.remove(s);
-            }
-        }
-        documents.deleteElement(file);
-
-    }
+//    void deleteFile(File file) {
+//        String[] text = DocumentFormat.verifyFormat(file);
+//        assert text != null;
+//        for (String s : text){
+//            words.get(s).getRecurrences().deleteElement(file);
+//            if (words.get(s).getRecurrences().getSize()==0){
+//                words.remove(s);
+//            }
+//        }
+//        documents.deleteElement(file);
+//
+//    }
 
     /**
      * Verifica si el documentos que se quiere agregar ya existe en la biblioteca
@@ -102,6 +110,18 @@ public class DocumentReader {
             }
         }
         return false;
+    }
+    private LinkedArrayList<int[]> recurrences(LinkedArrayList<String[]> text, String word){
+        LinkedArrayList<int[]> mat = new LinkedArrayList<int[]>();
+        for (int i = 0; i < text.getSize(); i++) {
+            String[] array = text.getElement(i);
+            for (int j = 0; j < array.length; j++) {
+                if (array[j].equals(word)){
+                    mat.addLast(new int [] {i,j});
+                }
+            }
+        }
+        return mat;
     }
 
 
