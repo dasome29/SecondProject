@@ -16,6 +16,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 
 
+/**
+ * Clase encargada de controlar el ordenamiento de los resultados
+ */
 public class SortDocumentsBar {
     private Pane root;
     private Pane sortPane;
@@ -25,8 +28,10 @@ public class SortDocumentsBar {
     private RadioButton sortByDate;
 
 
-
-
+    /**
+     * Método encargado de establecer la barra de ordenamiento en la parte gráfica de la aplicación
+     * @param root panel principal
+     */
     public SortDocumentsBar(Pane root){
         this.root = root;
 
@@ -67,6 +72,11 @@ public class SortDocumentsBar {
 
     }
 
+    /**
+     * Este método es el encargado de verificar cual de los tres RadioButtons se encuentran seleccionados para llamr al
+     * método correspondiente
+     */
+
     private void setEventToggleGroup(){
         toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -74,15 +84,15 @@ public class SortDocumentsBar {
                 try {
                     if (sortByName.isSelected()) {
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
-                        SortByName(SearchBar.listOfWords);
+                        SortByName(SearchBar.resultsList);
                         System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
 
                     }
                     if (sortBySize.isSelected()) {
+                        SortBySize();
                         System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
                     }
                     if (sortByDate.isSelected()) {
-                        //SortByDate(SearchBar.listOfWords);
                         SortByDate(SearchBar.resultsList);
                         System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
                     }
@@ -95,19 +105,58 @@ public class SortDocumentsBar {
 
     }
 
+    /**
+     * Esté metodo es llamado para ordenar los resultados por nombre
+     * @param list lista a ordenar
+     */
 
-    private void SortByName(LinkedArrayList<File> list){
+    private void SortByName(LinkedArrayList<Results> list){
+        quickSort(list,0, list.getSize()-1);
+        SearchBar.updatePositions();
     }
 
 
+    /**
+     * Algortimo de ordenamiento quickSort
+     * @param list lista aordenar
+     * @param start indide de incio
+     * @param end indice final
+     */
 
-    private LinkedArrayList<File> quickSort(LinkedArrayList<File> list, int start, int end){
-        return quickSortAux(list, start, end);
+    private void quickSort(LinkedArrayList<Results> list, int start, int end){
+        if(start < end){
+            int pos = quickSortAux(list,start, end);
+
+            quickSort(list, start, pos-1);
+            quickSort(list,pos+1, end);
+        }
 
     }
 
-    private LinkedArrayList<File> quickSortAux(LinkedArrayList<File> list, int start, int end) {
-        return null;
+    /**
+     * Método auxiliar del quickSort
+     * @param list lista a ordenar
+     * @param start indice de inicio
+     * @param end indice final
+     * @return nuevo indice
+     */
+    private int quickSortAux(LinkedArrayList<Results> list, int start, int end) {
+        Results pivote = list.getElement(end);
+        int i = start-1;
+        for(int j=start; j< end; j++){
+            if(list.getElement(j).file.getName().toLowerCase().compareTo(pivote.file.getName().toLowerCase()) < 0){
+                i++;
+
+                Results temp = list.getElement(i);
+                list.replace(i, list.getElement(j));
+                list.replace(j, temp);
+            }
+        }
+        Results temp = list.getElement(i+1);
+        list.replace(i+1, list.getElement(end));
+        list.replace(end, temp);
+
+        return i+1;
     }
 
 
@@ -117,12 +166,16 @@ public class SortDocumentsBar {
      * @param list lista a ordenar
      */
     private void SortByDate(LinkedArrayList<Results> list){
-        for(int i=0; i < list.getSize(); i++) {
-            for (int current = 0; current < list.getSize() - 1; current++) {
+        for(int i=0; i<list.getSize(); i++){
+            System.out.println(list.getElement(i).file.getName());
+        }
+        for(int i=0; i < list.getSize()-1; i++) {
+            for (int current = 0; current < list.getSize() -i-1; current++) {
                 try {
-                    FileTime fileTime = getFileTime(list.getElement(i).file);
-                    FileTime file1Time2 = getFileTime(list.getElement(i+1).file);
-                    if(fileTime.compareTo(file1Time2) > 0){
+                    FileTime fileTime = getFileTime(list.getElement(current).file);
+                    FileTime file1Time2 = getFileTime(list.getElement(current+1).file);
+                    System.out.println(list.getElement(current).file.getName() + " " + fileTime + " ||| " + list.getElement(current+1).file.getName()  + " " + file1Time2 + "  res " +   fileTime.compareTo(file1Time2));
+                    if(fileTime.compareTo(file1Time2) < 0){
                         Results temp = list.getElement(current);
                         list.replace(current, list.getElement(current+1));
                         list.replace(current+1, temp);
@@ -149,12 +202,28 @@ public class SortDocumentsBar {
         FileTime file1Time = attributes.creationTime();
         return file1Time;
     }
+
+
+    /**
+     * Este método es el encargado de ordenar los resultados por tamaño del archivo
+     */
     private void SortBySize(){
         SearchBar.resultsList = radixSort(SearchBar.resultsList);
+        for(int i=0; i<SearchBar.resultsList.getSize();i++){
+            System.out.println(SearchBar.resultsList.getElement(i).file.getName());
+        }
         SearchBar.updatePositions();
     }
+
+
+    /**
+     * Algoritmo de ordenamiento radixSort
+     * @param list
+     * @return
+     */
     private static LinkedArrayList<Results> radixSort(LinkedArrayList<Results> list){
         int length = String.valueOf(getMax(list)).length();
+        System.out.println(length);
         for (int i = 1; i <= length; i++) {
             list = sort(positions(createList(10), (int) Math.pow(10, i), list), (int) Math.pow(10, i), list);
         }
@@ -178,16 +247,16 @@ public class SortDocumentsBar {
     private static int getMax(LinkedArrayList<Results> list){
         int max = 0;
         for (int i = 0; i < list.getSize(); i++) {
-            if(list.getElement(i).size>max){
-                max=list.getElement(i).size;
+            if(list.getElement(i).Filesize >max){
+                max=list.getElement(i).Filesize;
             }
         }
         return max;
     }
     private static LinkedArrayList<Integer> positions(LinkedArrayList<Integer> nums, int module, LinkedArrayList<Results> list){
         for (int i = 0; i < list.getSize(); i++) {
-            int x = (int) (list.getElement(i).size%module/Math.pow(10, (Math.log10(module)-1)));
-            int y = nums.getElement((int) (((list.getElement(i).size%module)/Math.pow(10, (Math.log10(module)-1)))))+1;
+            int x = (int) (list.getElement(i).Filesize %module/Math.pow(10, (Math.log10(module)-1)));
+            int y = nums.getElement((int) (((list.getElement(i).Filesize %module)/Math.pow(10, (Math.log10(module)-1)))))+1;
             nums.replace(x, y);
         }
         return nums;
@@ -196,14 +265,14 @@ public class SortDocumentsBar {
         LinkedArrayList<Integer> temp = createList(list.getSize());
         LinkedArrayList<Integer> newNums = sumList(nums);
         for (int i = list.getSize()-1; i >= 0; i--) {
-            int num = (int) (list.getElement(i).size%module/Math.pow(10, (Math.log10(module)-1)));
+            int num = (int) (list.getElement(i).Filesize %module/Math.pow(10, (Math.log10(module)-1)));
             newNums.replace(num,newNums.getElement(num)-1 );
-            temp.replace(newNums.getElement(num),list.getElement(i).size);
+            temp.replace(newNums.getElement(num),list.getElement(i).Filesize);
         }
         LinkedArrayList<Results> newList = new LinkedArrayList<Results>();
         for (int i = 0; i < temp.getSize(); i++) {
             for (int j = 0; j < list.getSize(); j++) {
-                if (temp.getElement(i) == list.getElement(j).size){
+                if (temp.getElement(i) == list.getElement(j).Filesize){
                     newList.addLast(list.getElement(j));
                     list.delete(j);
                 }

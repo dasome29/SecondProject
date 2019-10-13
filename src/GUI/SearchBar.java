@@ -28,7 +28,6 @@ public class SearchBar{
     private String word;
     private String phase;
     public static LinkedArrayList<File> listOfWords;
-    public static LinkedArrayList<Integer> listOfSize;
     public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
     private SortDocumentsBar sortDocumentsBar;
@@ -107,14 +106,14 @@ public class SearchBar{
         public void handle(MouseEvent mouseEvent) {
             try {
                 if(searchByWord.isSelected()) {
-                    resultsList.reset();
+                    resetResults();
                     String string = textField.getText().trim();
                     listOfWords = documentReader.words.get(string).getRecurrences();
                     System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
                     addDocumentsToScreen(string);
                 }
                 if(searchByPhrase.isSelected()){
-                    resultsList.reset();
+                    resetResults();
                     String[] string = textField.getText().split(" ");
                     listOfWords = documentReader.words.get(string[0]).getRecurrences();
                     searchPhase(string);
@@ -178,7 +177,6 @@ public class SearchBar{
         int posy = 10;
         for(int i=0; i < resultsList.getSize(); i++){
             Results results = resultsList.getElement(i);
-            System.out.println(results.file.getName() + "   " + posy);
             results.pane.setLayoutY(posy);
             if(posy > searchingResultsPane.getHeight()){
                 searchingResultsPane.setPrefHeight(posy +150);
@@ -187,6 +185,13 @@ public class SearchBar{
 
         }
     }
+
+    private void resetResults(){
+        resultsList.reset();
+        searchingResultsPane.getChildren().clear();
+    }
+
+
 
 
 

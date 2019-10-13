@@ -1,68 +1,38 @@
 package BinaryTree;
 
-import GUI.SearchBar;
-import LinkedArrayList.LinkedArrayList;
-import FileReader.RadixSort;
 
-import java.text.Collator;
-import java.util.Collections;
+import LinkedArrayList.LinkedArrayList;
 
 public class Main {
 
     public static void main(String[] args){
         BinaryTree test = new BinaryTree();
-//        LinkedArrayList<Integer> list = new LinkedArrayList<Integer>();
-//        list.addLast(1);
-//        list.addLast(6);
-//        list.addLast(8);
-//        list.addLast(7);
-//        list.addLast(5);
+        LinkedArrayList<Integer> lista = new LinkedArrayList<Integer>();
 //
-//        list.insert(0, 4);
-
-//        for (int i = 0; i < list.getSize(); i++) {
-//            System.out.println(list.getElement(i));
-//        }
-        test.insert("Pene");
-        test.insert("Gordo");
-        test.insert("Banano");
-        test.insert("Poronga");
-        test.insert("Perra");
-        test.insert("Puta");
-        test.insert("Picha");
-        test.insert("Panocha");
-        test.insert("Pinga");
-        test.insert("Polla");
-
-        test.remove("Pinga");
-        System.out.println(test.get("Polla"));
-=========
-
-        list.replace(2, 254);
-
-        String name = "Prueba2";
-        String name2 = "zaragoza";
 
 
-        int c = 10 > 20 ? 30 : 40;
-        System.out.println(c);
+        String name = "informeMovimientoParábolico";
+        String name2 = "Avion";
 
 
-        System.out.println(name.compareTo(name2));
+        int[] temp = new int[] {5,8,6,8,7,5,6,2,4};
+        bubbleSort(temp);
+
+
+
+        System.out.println(name2.compareTo(name));
     }
 
-    public static void insertionSort(int[] A) {
-        int in = 0;
-        int out = 0;
-        for (out = 1; out < A.length; out++) {
-            int temp = A[out];
-            in = out;
-            while (in > 0 && A[in - 1] >= temp) {
-                A[in] = A[in - 1];
-                --in;
+    public static int[] bubbleSort(int[] array){
+        for(int i=0; i < array.length -1; i++) {
+            for (int current = 0; current < array.length -i-1; current++) {
+                if (array[current] > array[current + 1]) {
+                    int temp = array[current];
+                    array[current] = array[current + 1];
+                    array[current + 1] = temp;
+                }
             }
-            A[in] = temp;
         }
->>>>>>>>> Temporary merge branch 2
+        return array;
     }
 }

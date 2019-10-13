@@ -26,18 +26,14 @@ public class Main extends Application {
     private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
-    private DocumentReader documentReader = new DocumentReader();
-    private TextField textField;
+    public static DocumentReader documentReader = new DocumentReader();
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         root = new Pane();
-        Label test = new Label("PENE");
 
 
-        test.setTranslateX(20);
-        test.setTranslateY(20);
 
 
         //Se crea la barra de búsqueda de texto
@@ -60,9 +56,10 @@ public class Main extends Application {
         documentsScroll = new Pane();
         documentsScroll.setPrefSize(350, 830);
         documentsScroll.setBackground(new Background(new BackgroundFill(Color.rgb(140,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
-        documentsScroll.getChildren().addAll(test);
         ScrollPane scrollPane = new ScrollPane(documentsScroll);
         pane.getChildren().addAll(scrollPane);
+
+        DocumentsLibrary documentsLibrary = new DocumentsLibrary(documentsScroll, pane, documentReader);
 
 
         Button addNewFile = new Button("Add File");
@@ -83,7 +80,6 @@ public class Main extends Application {
         primaryStage.setTitle("Text finder");
         primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
-        Document document =new  Document(pane);
     }
 
 
@@ -110,7 +106,7 @@ public class Main extends Application {
             File selectedFile = fileChooser.showOpenDialog(null);
 
             if(selectedFile != null) {
-                documentReader.documentReader(selectedFile);
+                documentReader.documentReader2(selectedFile);
             }
 
         }

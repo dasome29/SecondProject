@@ -1,6 +1,7 @@
 package FileReader;
 
 import BinaryTree.BinaryTree;
+import GUI.DocumentsLibrary;
 import LinkedArrayList.LinkedArrayList;
 import BinaryTree.Node;
 import javafx.geometry.Insets;
@@ -22,7 +23,7 @@ import java.io.File;
 public class DocumentReader {
     public BinaryTree words = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
-    private LinkedArrayList<File> documents = new LinkedArrayList<File>();
+    public static LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
     public DocumentReader() { }
@@ -39,8 +40,37 @@ public class DocumentReader {
         System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
             File file = (File) linkedArrayListFiles.getElement(i);
-            documentReader(file);
+            documentReader2(file);
 
+        }
+    }
+
+
+
+    public void documentReader2(File file){
+        if (!documentAlreadyExist(file)){
+            documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
+            DocumentsLibrary.addNewFileToLibrary(file);
+            String[] text = DocumentFormat.verifyFormat(file);
+            if(text != null){
+                for(String s : text){
+                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
+                            .replace(")", " ").replace("\n", " ");
+                    s = s.trim();
+                    if(!s.equals("")){
+                        if(!words.contains(s)){
+                            System.out.println(s);
+                            words.insert(s);
+                        }
+                        if(!words.get(s).getRecurrences().contains(file)){
+                            words.get(s).getRecurrences().addLast(file);
+
+                        }
+
+                    }
+                }
+
+            }
         }
     }
 
@@ -52,6 +82,7 @@ public class DocumentReader {
     public void documentReader(File file){
         if (!documentAlreadyExist(file)) {
             documents.addLast(file);
+            DocumentsLibrary.addNewFileToLibrary(file);
             String[] text = DocumentFormat.verifyFormat(file);
             if (text != null) {
                 for (String s : text) {
@@ -107,18 +138,27 @@ public class DocumentReader {
     }
 
 
-    private void addDocumentToLibrary(File file) {
-        Label label = new Label();
-        label.setPrefWidth(310);
-        label.setPrefHeight(50);
-        label.setText("\n" + file.getName() + "\n");
-        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
-        label.setAlignment(Pos.TOP_CENTER);
-        label.setBackground(new Background(new BackgroundFill(Color.rgb(140, 80, 80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(10);
-        //label.setLayoutY(posy);
-        //documentScroll.getChildren().addAll(label);
-        //posy += 75;
+    public void updateDocuments(File file) {
+        String[] text = DocumentFormat.verifyFormat(file);
+        if (text != null) {
+            for (String s : text) {
+                s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
+                        .replace(")", " ").replace("\n", " ");
+                s = s.trim();
+                if (!s.equals("")) {
+                    if (!words.contains(s)) {
+                        System.out.println(s);
+                        words.insert(s);
+                    }
+                    if (!words.get(s).getRecurrences().contains(file)) {
+                        words.get(s).getRecurrences().addLast(file);
+
+                    }
+
+                }
+
+            }
+        }
     }
 
 

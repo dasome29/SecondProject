@@ -12,7 +12,6 @@ import java.io.*;
 
 
 public class DocumentFormat {
-    private static DocumentReader documentReader;
 
 
     /**
