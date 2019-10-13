@@ -2,7 +2,9 @@ package GUI;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -10,6 +12,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import java.awt.*;
 import java.io.File;
@@ -25,7 +30,7 @@ public class Results {
     public int Filesize;
 
 
-    public Results(Pane searchingResultsPane, File file, String word, int posy){
+    Results(Pane searchingResultsPane, File file, String word, int posy){
         this.searchingResultsPane = searchingResultsPane;
         this.file = file;
         this.posy = posy;

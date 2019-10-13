@@ -1,8 +1,5 @@
 package LinkedArrayList;
 
-import BinaryTree.Node;
-import org.w3c.dom.NodeList;
-
 /**
  * This Class is the main storage for this project.
  * It can hold every type of object in it.
@@ -89,6 +86,7 @@ public class LinkedArrayList<T> {
      */
     public void deleteElement(T element){
         ListNode<T> temp = head;
+        int deleted = 0;
         for (int count = 0; count < size; ++count) {
             if (temp.getValue().equals(element)){
                 if (count == 0){
@@ -107,11 +105,13 @@ public class LinkedArrayList<T> {
                     count= count-1;
                 }
                 size--;
+                deleted++;
             }
             else {
                 temp = temp.getNext();
             }
         }
+        System.out.println(deleted);
     }
 
     /**

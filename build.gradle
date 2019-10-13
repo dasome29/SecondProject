@@ -46,6 +46,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.xmlbeans/xmlbeans
     compile group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '2.3.0'
 
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.1'
+
 
 
     // runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
