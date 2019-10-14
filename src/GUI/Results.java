@@ -100,15 +100,11 @@ public class Results {
         LinkedArrayList<int[]> index = DocumentReader.words.get(word).getRecurrences().getPositions(file);
         String content = "";
         for(int i=0; i< index.getSize(); i++) {
-            for (int x = 0; x < 3; x++) {
-                String[] line = text.getElement(index.getElement(i)[0]);
+                String[] line = text.getElement(index.getElement((i))[0]);
                 for (int j = 0; j < line.length; j++) {
                     content += line[j] + " ";
-
                 }
 
-
-            }
             content += "\n\n\n";
         }
         textArea.setText(content);
