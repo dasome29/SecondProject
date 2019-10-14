@@ -12,7 +12,8 @@ import java.io.File;
 
 public class Node {
     String element;
-    private LinkedArrayList<LinkedArrayList<LinkedArrayList>> recurrences = new LinkedArrayList<LinkedArrayList<LinkedArrayList>>();
+    LinkedArrayList<File> recurrences = new LinkedArrayList<File>();
+    //private LinkedArrayList<LinkedArrayList<LinkedArrayList>> recurrences = new LinkedArrayList<LinkedArrayList<LinkedArrayList>>();
 
     Node left;
     Node right;
@@ -26,11 +27,9 @@ public class Node {
         this.element = element;
     }
 
-    /**
-     * Método que retorn la lista  de concurrencias de la palanbra
-     * @return Lista con las concurrencias
-     */
-    public LinkedArrayList<File> getRecurrences (){
+
+
+    /*
     public void setDocument(File file, LinkedArrayList<int[]> mat){
         LinkedArrayList<File> document = new LinkedArrayList<File>();
         document.addLast(file);
@@ -60,8 +59,14 @@ public class Node {
         return result;
     }
 
+     */
 
-    public LinkedArrayList<LinkedArrayList<LinkedArrayList>> getRecurrences (){
+
+    /**
+     * Método que retorn la lista  de concurrencias de la palanbra
+     * @return Lista con las concurrencias
+     */
+    public LinkedArrayList<File> getRecurrences (){
         return recurrences;
     }
 }

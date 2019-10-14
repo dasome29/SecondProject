@@ -1,6 +1,7 @@
 package FileReader;
 
 import BinaryTree.BinaryTree;
+import GUI.DocumentsLibrary;
 import LinkedArrayList.LinkedArrayList;
 import BinaryTree.Node;
 import javafx.geometry.Insets;
@@ -20,7 +21,7 @@ import java.io.File;
  * Clase la cual lee cada documento que ingresa a la biblioteca e realiza parte de la indizacion
  */
 public class DocumentReader {
-    public BinaryTree words = new BinaryTree();
+    public static BinaryTree words = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
     public static LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
@@ -40,36 +41,37 @@ public class DocumentReader {
         System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
             File file = linkedArrayListFiles.getElement(i);
-            documentReader(file);
-            File file = (File) linkedArrayListFiles.getElement(i);
             documentReader2(file);
+
 
         }
     }
 
 
 
-    /*
+
     public void documentReader2(File file){
         if (!documentAlreadyExist(file)){
             documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
             DocumentsLibrary.addNewFileToLibrary(file);
-            String[] text = DocumentFormat.verifyFormat(file);
+            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
             if(text != null){
-                for(String s : text){
-                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
-                            .replace(")", " ").replace("\n", " ");
-                    s = s.trim();
-                    if(!s.equals("")){
-                        if(!words.contains(s)){
-                            System.out.println(s);
-                            words.insert(s);
-                        }
-                        if(!words.get(s).getRecurrences().contains(file)){
-                            words.get(s).getRecurrences().addLast(file);
+                for(int i=0; i<text.getSize(); i++) {
+                    for (int j=0; j<text.getElement(i).length; j++) {
+                        String s = text.getElement(i)[j];
+                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                        s = s.trim();
+                        if (!s.equals("")) {
+                            if (!words.contains(s)) {
+                                System.out.println(s);
+                                words.insert(s);
+                            }
+                            if (!words.get(s).getRecurrences().contains(file)) {
+                                words.get(s).getRecurrences().addLast(file);
+                            }
+                            words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
 
                         }
-
                     }
                 }
 
@@ -77,16 +79,17 @@ public class DocumentReader {
         }
     }
 
-     */
 
 
     /**
      * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
      * @param file documento a agrega
      */
+    /*
     public void documentReader(File file){
         if (!documentAlreadyExist(file)) {
             documents.addLast(file);
+            DocumentsLibrary.addNewFileToLibrary(file);
             LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
             if (text != null) {
                 for (int i = 0; i < text.getSize(); i++) {
@@ -95,7 +98,7 @@ public class DocumentReader {
                                 .replace(")", " ").replace("\n", " ");
                         s = s.trim();
                         if (!s.equals("")) {
-//                            System.out.println("|" + s + "|");
+                            System.out.println("|" + s + "|");
                             documentContent.addLast(s);
                         }
                     }
@@ -116,6 +119,8 @@ public class DocumentReader {
             System.out.println("El documento ya existe en la biblioteca");
         }
     }
+
+     */
 
 //    void deleteFile(File file) {
 //        String[] text = DocumentFormat.verifyFormat(file);
@@ -158,8 +163,9 @@ public class DocumentReader {
     }
 
 
+    /*
     public void updateDocuments(File file) {
-        String[] text = DocumentFormat.verifyFormat(file);
+        LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
         if (text != null) {
             for (String s : text) {
                 s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
@@ -180,6 +186,8 @@ public class DocumentReader {
             }
         }
     }
+
+     */
 
 
 }

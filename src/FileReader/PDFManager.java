@@ -9,7 +9,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import java.io.File;
 import java.io.IOException;
 
-public class PDFManager {
+public class PDFManager{
     private PDDocument pdDoc;
     private String text;
 

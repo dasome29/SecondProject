@@ -153,6 +153,14 @@ public class LinkedArrayList<T> {
         }
     }
 
+    public LinkedArrayList<int[]> getPositions(T object) {
+        ListNode current = head;
+        while (!current.getValue().equals(object)) {
+            current = current.getNext();
+        }
+        return current.getPositions();
+
+}
     public void delete(int i) {
         if (i < size && size>0) {
             ListNode<T> temp = head;

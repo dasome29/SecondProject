@@ -108,17 +108,18 @@ public class SearchBar{
                 if(searchByWord.isSelected()) {
                     resetResults();
                     String string = textField.getText().trim();
-                    listOfWords = documentReader.words.get(string).getDocuments();
+                    listOfWords = documentReader.words.get(string).getRecurrences();
                     System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
                     addDocumentsToScreen(string);
                 }
                 if(searchByPhrase.isSelected()){
                     resetResults();
                     String[] string = textField.getText().split(" ");
-                    listOfWords = documentReader.words.get(string[0]).getDocuments();
+                    listOfWords = documentReader.words.get(string[0]).getRecurrences();
                     searchPhrase(string);
                 }
             } catch (NullPointerException e) {
+                e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Content", ButtonType.OK);
                 alert.setHeaderText("No existe ninguna palabra o frase para buscar");
                 alert.setContentText("Por favor introduzca una palabra o frase para realizar la búsqueda");

@@ -57,7 +57,7 @@ public class DocumentsLibrary {
 
     public static void updateDocuments(){
         for(int i=0; i< documents.getSize(); i++){
-            documentReader.updateDocuments(documents.getElement(i));
+            //documentReader.updateDocuments(documents.getElement(i));
             System.out.println("ACTUALIZANDO");
             System.out.println();
 

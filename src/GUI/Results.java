@@ -1,5 +1,8 @@
 package GUI;
 
+import FileReader.DocumentFormat;
+import FileReader.DocumentReader;
+import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -61,11 +64,14 @@ public class Results {
         pane.getChildren().addAll(button);
 
 
+
         textArea = new TextArea(file.getName());
         textArea.setPrefSize(520, 220);
         textArea.setEditable(false);
         textArea.setLayoutY(30);
         pane.getChildren().add(textArea);
+
+        addText();
 
         searchingResultsPane.getChildren().add(pane);
 
@@ -87,5 +93,25 @@ public class Results {
         }
     };
 
+
+    private void addText(){
+        System.out.println("--------------------");
+        LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+        LinkedArrayList<int[]> index = DocumentReader.words.get(word).getRecurrences().getPositions(file);
+        String content = "";
+        for(int i=0; i< index.getSize(); i++) {
+            for (int x = 0; x < 3; x++) {
+                String[] line = text.getElement(index.getElement(i)[0]);
+                for (int j = 0; j < line.length; j++) {
+                    content += line[j] + " ";
+
+                }
+
+
+            }
+            content += "\n\n\n";
+        }
+        textArea.setText(content);
+    }
 
 }
