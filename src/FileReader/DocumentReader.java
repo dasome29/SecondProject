@@ -1,32 +1,22 @@
 package FileReader;
 
 import BinaryTree.BinaryTree;
+import Components.DocumentsLibrary;
 import LinkedArrayList.LinkedArrayList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.hslf.record.CString;
 
 import java.io.File;
-import java.io.IOException;
 
 
 /**
  * Clase la cual lee cada documento que ingresa a la biblioteca e realiza parte de la indizacion
  */
 public class DocumentReader {
-    public BinaryTree words = new BinaryTree();
+    public static BinaryTree words = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
-    private LinkedArrayList<File> documents = new LinkedArrayList<File>();
+    public static LinkedArrayList<File> documents = new LinkedArrayList<File>();
+
+
+    public DocumentReader() { }
 
 
 
@@ -41,19 +31,58 @@ public class DocumentReader {
         System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
             File file = linkedArrayListFiles.getElement(i);
-            documentReader(file);
+            documentReader2(file);
+
 
         }
     }
+
+
+
+    public void documentReader2(File file){
+        if (!documentAlreadyExist(file)){
+                documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
+                DocumentsLibrary.addNewFileToLibrary(file);
+            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+            if(text != null){
+                for(int i=0; i<text.getSize(); i++) {
+                    for (int j=0; j<text.getElement(i).length; j++) {
+                        String s = text.getElement(i)[j];
+                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                        s = s.trim();
+                        if (!s.equals("")) {
+                            if (!words.contains(s)) {
+                                words.insert(s);
+                            }
+                            if (!words.get(s).getRecurrences().contains(file)) {
+                                words.get(s).getRecurrences().addLast(file);
+                            }
+                            words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+
+
+
 
 
     /**
      * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
      * @param file documento a agrega
      */
-    public void documentReader(File file) {
+
+
+    /*
+    public void documentReader(File file){
         if (!documentAlreadyExist(file)) {
             documents.addLast(file);
+            DocumentsLibrary.addNewFileToLibrary(file);
             LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
             if (text != null) {
                 for (int i = 0; i < text.getSize(); i++) {
@@ -62,7 +91,7 @@ public class DocumentReader {
                                 .replace(")", " ").replace("\n", " ");
                         s = s.trim();
                         if (!s.equals("")) {
-//                            System.out.println("|" + s + "|");
+                            System.out.println("|" + s + "|");
                             documentContent.addLast(s);
                         }
                     }
@@ -84,6 +113,10 @@ public class DocumentReader {
         }
     }
 
+     */
+
+
+
 //    void deleteFile(File file) {
 //        String[] text = DocumentFormat.verifyFormat(file);
 //        assert text != null;
@@ -102,10 +135,10 @@ public class DocumentReader {
      * @param fileToAdd documento a agregar
      * @return true en caso de que ya existe, false en caso contrario
      */
-    private boolean documentAlreadyExist(File fileToAdd) {
-        for (int i = 0; i < documents.getSize(); i++) {
+    private boolean documentAlreadyExist(File fileToAdd){
+        for(int i=0; i<documents.getSize(); i++){
             File file = documents.getElement(i);
-            if (file.equals(fileToAdd)) {
+            if(file.equals(fileToAdd)){
                 return true;
             }
         }
@@ -123,21 +156,4 @@ public class DocumentReader {
         }
         return mat;
     }
-
-
-    private void addDocumentToLibrary(File file) {
-        Label label = new Label();
-        label.setPrefWidth(310);
-        label.setPrefHeight(50);
-        label.setText("\n" + file.getName() + "\n");
-        label.setFont(Font.font("Arial Black", FontWeight.BOLD, 15));
-        label.setAlignment(Pos.TOP_CENTER);
-        label.setBackground(new Background(new BackgroundFill(Color.rgb(140, 80, 80), CornerRadii.EMPTY, Insets.EMPTY)));
-        label.setLayoutX(10);
-        //label.setLayoutY(posy);
-        //documentScroll.getChildren().addAll(label);
-        //posy += 75;
-    }
-
-
 }

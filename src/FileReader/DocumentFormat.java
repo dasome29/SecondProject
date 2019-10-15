@@ -8,12 +8,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
 import java.io.*;
-import java.util.Scanner;
+
 
 public class DocumentFormat {
-    private static DocumentReader documentReader;
 
 
     /**
@@ -58,6 +56,7 @@ public class DocumentFormat {
             }
             if (nameFile.substring(nameFile.length() - 4).equals("docx")) {
                 linkedArrayList.addLast(file);
+
             }
 
             if (substring.equals("txt")) {
@@ -110,7 +109,10 @@ public class DocumentFormat {
             String[] doc = extractor.getText().split("\n");
             for (String s : doc) {
                 result.addLast(s.split(" "));
+                System.out.println();
             }
+
+            return result;
 
 
         }catch (FileNotFoundException e){

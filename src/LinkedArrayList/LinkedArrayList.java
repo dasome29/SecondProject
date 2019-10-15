@@ -120,7 +120,7 @@ public class LinkedArrayList<T> {
      * @param element The new value of the node.
      */
     public void replace(int i, T element){
-        if (i<size){
+        if (i<=size){
             ListNode<T> temp = head;
             for (int count = 0; count < i && temp.getNext() != null; ++count) {
                 temp = temp.getNext();
@@ -152,6 +152,15 @@ public class LinkedArrayList<T> {
             }
         }
     }
+
+    public LinkedArrayList<int[]> getPositions(T object) {
+        ListNode current = head;
+        while (!current.getValue().equals(object)) {
+            current = current.getNext();
+        }
+        return current.getPositions();
+
+}
     public void delete(int i) {
         if (i < size && size>0) {
             ListNode<T> temp = head;
@@ -174,10 +183,22 @@ public class LinkedArrayList<T> {
             }
             else{
                 temp.getPrev().setNext(temp.getNext());
-                temp.getNext().setPrev(temp.getPrev());
-            }
+                temp.getNext().setPrev(temp.getPrev()); }
             size--;
         }
+    }
+
+
+    public boolean contains(T object){
+        ListNode current = head;
+        for(int i=0; i < size; i++){
+            if(current.getValue().equals(object)){
+                return true;
+            }
+            current = current.getNext();
+        }
+        return false;
+
     }
 
     public int getSize() {

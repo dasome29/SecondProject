@@ -6,6 +6,7 @@ package LinkedArrayList;
  */
 class ListNode<T> {
     private T valuex;
+    private LinkedArrayList<int[]> positions = new LinkedArrayList<int[]>();
     private ListNode<T> nextx;
     private ListNode<T> prevx;
 
@@ -49,5 +50,9 @@ class ListNode<T> {
     }
     void setPrev(ListNode<T> newPrev){
         prevx = newPrev;
+    }
+
+    LinkedArrayList<int[]> getPositions(){
+        return positions;
     }
 }

@@ -2,19 +2,39 @@ package BinaryTree;
 
 import LinkedArrayList.LinkedArrayList;
 
+
+/**
+ * Clase donde se implementa el árbol binario necesario para la indización de los documentos
+ */
 public class BinaryTree{
     private Node root = null;
     private Node last = null;
 
+
+    /**
+     * Verifica si el árbol se encuentra vacío o no
+     * @return
+     */
     boolean isEmpty(){
         return root == null;
     }
 
 
+    /**
+     * Método que indica si el elemento ingresado por parámetros se encuentra dentro del árbol
+     * @param element elemento a verificar
+     * @return true en caso que sí lo contenga, false en caso contrario
+     */
     public boolean contains(String element){
         return this.contains(element, root);
     }
 
+    /**
+     * Método auxiliar del contains, recorre el árbol en busca del elemento
+     * @param element elemento a verificar
+     * @param current nodo actual
+     * @return true en caso que sí lo contenga, false en caso contrario
+     */
     private boolean contains(String element, Node current){
         if(current == null){
             return false;
@@ -30,6 +50,12 @@ public class BinaryTree{
         }
     }
 
+
+    /**
+     * Método para obtener el nodo del elemento
+     * @param name palanbra
+     * @return Nodo de la palabra
+     */
     public Node get(String name){
         return this.get(name, root);
 
@@ -37,6 +63,12 @@ public class BinaryTree{
     }
 
 
+    /**
+     * Método auxiliar del get
+     * @param element elemento a obtener
+     * @param current Nodo actual
+     * @return Nodo de la palabra
+     */
     private Node get(String element, Node current){
         if(current == null){
             return null;
@@ -54,11 +86,20 @@ public class BinaryTree{
     }
 
 
-
+    /**
+     * Método que inserta un elemento al árbol
+     * @param element elemento a insertar
+     */
     public void insert(String element){
         root = this.insert(element, root);
     }
 
+    /**
+     * Método auxuliar del insert
+     * @param element elemento a insertar
+     * @param current Nodo actual
+     * @return Nodo
+     */
 
     private Node insert(String element, Node current){
         if(current == null){
@@ -76,9 +117,21 @@ public class BinaryTree{
         return current;
     }
 
+
+    /**
+     * Método para remover un elemento del árbol
+     * @param element elemento a remover
+     */
     public void remove(String element){
         remove(element, root);
     }
+
+    /**
+     * Método auxiliar para remover un elemento del árbol
+     * @param element elemento a remover
+     * @param c Nodo actual
+     * @return
+     */
     private Node remove(String element, Node c){
         if( c == null){
             return null;

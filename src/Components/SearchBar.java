@@ -1,8 +1,7 @@
-package GUI;
+package Components;
 
 import FileReader.DocumentFormat;
 import FileReader.DocumentReader;
-import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,24 +17,33 @@ import java.io.File;
 
 public class SearchBar{
     private Pane root;
+    private Pane searchBar = new Pane();
     private DocumentReader documentReader;
+    private Button searchButton;
     private TextField textField;
+    private ToggleGroup searchBy;
     private RadioButton searchByWord;
     private RadioButton searchByPhrase;
-    private String word;
-    private String phase;
     public static LinkedArrayList<File> listOfWords;
-    public static LinkedArrayList<Integer> listOfSize;
+    public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
+    private SortDocumentsBar sortDocumentsBar;
     public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
-    SearchBar(Pane root, DocumentReader documentReader){
+    public SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
         this.documentReader = documentReader;
+
+
+
     }
 
-    void setSearchBar() {
+    public void setSearchBar() {
+
+        sortDocumentsBar = new SortDocumentsBar(root);
+
+
         searchingResultsPane = new Pane();
         searchingResultsPane.setLayoutX(0);
         searchingResultsPane.setLayoutY(0);
@@ -43,7 +51,7 @@ public class SearchBar{
         searchingResultsPane.setBackground(new Background(new BackgroundFill(Color.rgb(147,147,147), CornerRadii.EMPTY, Insets.EMPTY)));
 
 
-        ScrollPane scrollPaneResults = new ScrollPane();
+        scrollPaneResults = new ScrollPane();
         scrollPaneResults.setLayoutX(352);
         scrollPaneResults.setLayoutY(135);
         scrollPaneResults.setPrefSize(550, 800);
@@ -52,7 +60,7 @@ public class SearchBar{
         root.getChildren().add(scrollPaneResults);
 
 
-        Pane searchBar = new Pane();
+        searchBar = new Pane();
         searchBar.setPrefSize(550, 100);
         searchBar.setLayoutX(352);
         searchBar.setLayoutY(0);
@@ -60,7 +68,7 @@ public class SearchBar{
         root.getChildren().add(searchBar);
 
 
-        ToggleGroup searchBy = new ToggleGroup();
+        searchBy = new ToggleGroup();
 
         searchByWord = new RadioButton("By word");
         searchByWord.setLayoutX(350);
@@ -74,7 +82,7 @@ public class SearchBar{
 
         searchBar.getChildren().addAll(searchByWord, searchByPhrase);
 
-        Button searchButton = new Button("Search");
+        searchButton = new Button("Search");
         searchButton.setLayoutX(250);
         searchButton.setLayoutY(30);
         searchButton.setOnMouseClicked(searchWord);
@@ -90,24 +98,25 @@ public class SearchBar{
 
 
 
-    private EventHandler<MouseEvent> searchWord = new EventHandler<>() {
+    private EventHandler<MouseEvent> searchWord = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             try {
-                if (searchByWord.isSelected()) {
-                    resultsList.reset();
+                if(searchByWord.isSelected()) {
+                    resetResults();
                     String string = textField.getText().trim();
-                    listOfWords = documentReader.words.get(string).getDocuments();
+                    listOfWords = documentReader.words.get(string).getRecurrences();
                     System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
                     addDocumentsToScreen(string);
                 }
-                if (searchByPhrase.isSelected()) {
-                    resultsList.reset();
+                if(searchByPhrase.isSelected()){
+                    resetResults();
                     String[] string = textField.getText().split(" ");
-                    listOfWords = documentReader.words.get(string[0]).getDocuments();
+                    listOfWords = documentReader.words.get(string[0]).getRecurrences();
                     searchPhrase(string);
                 }
             } catch (NullPointerException e) {
+                e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Content", ButtonType.OK);
                 alert.setHeaderText("No existe ninguna palabra o frase para buscar");
                 alert.setContentText("Por favor introduzca una palabra o frase para realizar la búsqueda");
@@ -126,10 +135,9 @@ public class SearchBar{
             assert text != null;
             for (int j = 0; j < text.getSize(); j++) {
                 if (searchPhrase(text.getElement(j), phase)) {
-                    System.out.println("La frase se encuentra en alguno de los documentos");
-                    Results results = new Results(searchingResultsPane, file, word, posy);
+                    Results results = new Results(searchingResultsPane, file, phase, posy);
                     resultsList.addLast(results);
-                    posy += 100;
+                    posy += 250;
                 }
             }
 
@@ -137,15 +145,20 @@ public class SearchBar{
     }
     private boolean searchPhrase(String[] text, String[] phase){
         int index = 0;
-        for (String s : text) {
-            if (s.equals(phase[index])) {
-                if (index == phase.length - 1) {
+        System.out.println(text.length );
+        for (int i=0; i<text.length; i++) {
+            if (text[i].equals(phase[index])) {
+                System.out.println(index +"  " +  (phase.length -1));
+                if (index == phase.length -1) {
+                    System.out.println("Es verdad");
                     return true;
-                } else {
-                    index++;
                 }
+                index++;
+                System.out.println("No son iguales");
             }
         }
+
+        System.out.println();
         return false;
     }
 
@@ -178,6 +191,13 @@ public class SearchBar{
 
         }
     }
+
+    private void resetResults(){
+        resultsList.reset();
+        searchingResultsPane.getChildren().clear();
+    }
+
+
 
 
 
