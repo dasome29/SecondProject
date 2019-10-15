@@ -45,6 +45,13 @@ public class Node {
         }
         return result;
     }
+    public void deleteDoc(File file){
+        for (int i = 0; i < recurrences.getSize(); i++) {
+            if (recurrences.getElement(i).getElement(0).getElement(0).equals(file)){
+                recurrences.delete(i);
+            }
+        }
+    }
 
 
     public LinkedArrayList<LinkedArrayList<LinkedArrayList>> getRecurrences (){
