@@ -1,18 +1,8 @@
 package FileReader;
 
 import BinaryTree.BinaryTree;
-import GUI.DocumentsLibrary;
+import Components.DocumentsLibrary;
 import LinkedArrayList.LinkedArrayList;
-import BinaryTree.Node;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 import java.io.File;
 
@@ -49,11 +39,10 @@ public class DocumentReader {
 
 
 
-
     public void documentReader2(File file){
         if (!documentAlreadyExist(file)){
-            documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
-            DocumentsLibrary.addNewFileToLibrary(file);
+                documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
+                DocumentsLibrary.addNewFileToLibrary(file);
             LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
             if(text != null){
                 for(int i=0; i<text.getSize(); i++) {
@@ -63,7 +52,6 @@ public class DocumentReader {
                         s = s.trim();
                         if (!s.equals("")) {
                             if (!words.contains(s)) {
-                                System.out.println(s);
                                 words.insert(s);
                             }
                             if (!words.get(s).getRecurrences().contains(file)) {
@@ -77,7 +65,10 @@ public class DocumentReader {
 
             }
         }
+
     }
+
+
 
 
 
@@ -85,6 +76,8 @@ public class DocumentReader {
      * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
      * @param file documento a agrega
      */
+
+
     /*
     public void documentReader(File file){
         if (!documentAlreadyExist(file)) {
@@ -121,6 +114,8 @@ public class DocumentReader {
     }
 
      */
+
+
 
 //    void deleteFile(File file) {
 //        String[] text = DocumentFormat.verifyFormat(file);
@@ -161,33 +156,4 @@ public class DocumentReader {
         }
         return mat;
     }
-
-
-    /*
-    public void updateDocuments(File file) {
-        LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
-        if (text != null) {
-            for (String s : text) {
-                s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ")
-                        .replace(")", " ").replace("\n", " ");
-                s = s.trim();
-                if (!s.equals("")) {
-                    if (!words.contains(s)) {
-                        System.out.println(s);
-                        words.insert(s);
-                    }
-                    if (!words.get(s).getRecurrences().contains(file)) {
-                        words.get(s).getRecurrences().addLast(file);
-
-                    }
-
-                }
-
-            }
-        }
-    }
-
-     */
-
-
 }

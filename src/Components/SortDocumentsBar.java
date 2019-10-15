@@ -1,7 +1,7 @@
-package FileReader;
+package Components;
 
-import GUI.Results;
-import GUI.SearchBar;
+import Components.Results;
+import Components.SearchBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

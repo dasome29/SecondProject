@@ -2,37 +2,40 @@ package BinaryTree;
 
 
 import LinkedArrayList.LinkedArrayList;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
-public class Main {
+import java.awt.*;
 
-    public static void main(String[] args){
-        BinaryTree test = new BinaryTree();
-        LinkedArrayList<Integer> lista = new LinkedArrayList<Integer>();
-//
-
-
-        String name = "informeMovimientoParábolico";
-        String name2 = "Avion";
+public class Main extends Application {
 
 
-        int[] temp = new int[] {5,8,6,8,7,5,6,2,4};
-        bubbleSort(temp);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
 
+        Pane root = new Pane();
 
-        System.out.println(name2.compareTo(name));
+
+        TextArea textArea = new TextArea("Hola como estan ustedes");
+        textArea.setLayoutX(75);
+        textArea.setLayoutY(75);
+        textArea.setEditable(false);
+        root.getChildren().add(textArea);
+
+
+        Scene scene = new Scene(root,500,500);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
     }
 
-    public static int[] bubbleSort(int[] array){
-        for(int i=0; i < array.length -1; i++) {
-            for (int current = 0; current < array.length -i-1; current++) {
-                if (array[current] > array[current + 1]) {
-                    int temp = array[current];
-                    array[current] = array[current + 1];
-                    array[current + 1] = temp;
-                }
-            }
-        }
-        return array;
+
+
+    public static void main(String[] args){
+        launch(args);
     }
 }

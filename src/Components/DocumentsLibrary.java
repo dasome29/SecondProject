@@ -1,4 +1,4 @@
-package GUI;
+package Components;
 
 import FileReader.DocumentReader;
 import LinkedArrayList.LinkedArrayList;
@@ -57,7 +57,7 @@ public class DocumentsLibrary {
 
     public static void updateDocuments(){
         for(int i=0; i< documents.getSize(); i++){
-            //documentReader.updateDocuments(documents.getElement(i));
+            documentReader.documentReader2(documents.getElement(i));
             System.out.println("ACTUALIZANDO");
             System.out.println();
 

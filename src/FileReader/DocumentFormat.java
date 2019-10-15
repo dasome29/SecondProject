@@ -109,7 +109,10 @@ public class DocumentFormat {
             String[] doc = extractor.getText().split("\n");
             for (String s : doc) {
                 result.addLast(s.split(" "));
+                System.out.println();
             }
+
+            return result;
 
 
         }catch (FileNotFoundException e){

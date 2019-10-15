@@ -1,8 +1,7 @@
-package GUI;
+package Components;
 
 import FileReader.DocumentFormat;
 import FileReader.DocumentReader;
-import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,8 +24,6 @@ public class SearchBar{
     private ToggleGroup searchBy;
     private RadioButton searchByWord;
     private RadioButton searchByPhrase;
-    private String word;
-    private String phase;
     public static LinkedArrayList<File> listOfWords;
     public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
@@ -34,7 +31,7 @@ public class SearchBar{
     public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
-    SearchBar(Pane root, DocumentReader documentReader){
+    public SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
         this.documentReader = documentReader;
 
@@ -42,7 +39,7 @@ public class SearchBar{
 
     }
 
-    void setSearchBar() {
+    public void setSearchBar() {
 
         sortDocumentsBar = new SortDocumentsBar(root);
 
@@ -138,10 +135,9 @@ public class SearchBar{
             assert text != null;
             for (int j = 0; j < text.getSize(); j++) {
                 if (searchPhrase(text.getElement(j), phase)) {
-                    System.out.println("La frase se encuentra en alguno de los documentos");
-                    Results results = new Results(searchingResultsPane, file, word, posy);
+                    Results results = new Results(searchingResultsPane, file, phase, posy);
                     resultsList.addLast(results);
-                    posy += 100;
+                    posy += 250;
                 }
             }
 
@@ -149,15 +145,20 @@ public class SearchBar{
     }
     private boolean searchPhrase(String[] text, String[] phase){
         int index = 0;
-        for (String s : text) {
-            if (s.equals(phase[index])) {
-                if (index == phase.length - 1) {
+        System.out.println(text.length );
+        for (int i=0; i<text.length; i++) {
+            if (text[i].equals(phase[index])) {
+                System.out.println(index +"  " +  (phase.length -1));
+                if (index == phase.length -1) {
+                    System.out.println("Es verdad");
                     return true;
-                } else {
-                    index++;
                 }
+                index++;
+                System.out.println("No son iguales");
             }
         }
+
+        System.out.println();
         return false;
     }
 
