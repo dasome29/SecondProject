@@ -47,17 +47,17 @@ public class DocumentReader {
             if(text != null){
                 for(int i=0; i<text.getSize(); i++) {
                     for (int j=0; j<text.getElement(i).length; j++) {
-                        String s = text.getElement(i)[j];
-                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
-                        s = s.trim();
-                        if (!s.equals("")) {
-                            if (!words.contains(s)) {
-                                words.insert(s);
+                        String word = text.getElement(i)[j];
+                        word = word.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                        word = word.trim();
+                        if (!word.equals("")) {
+                            if (!words.contains(word)) {
+                                words.insert(word);
                             }
-                            if (!words.get(s).getRecurrences().contains(file)) {
-                                words.get(s).getRecurrences().addLast(file);
+                            if (!words.get(word).getRecurrences().contains(file)) {
+                                words.get(word).getRecurrences().addLast(file);
                             }
-                            words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
+                            words.get(word).getRecurrences().getPositions(file).addLast(new int[] {i,j});
 
                         }
                     }
@@ -156,4 +156,29 @@ public class DocumentReader {
         }
         return mat;
     }
+
+    public void updateDocuments(File file){
+            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+            if(text != null){
+                for(int i=0; i<text.getSize(); i++) {
+                    for (int j=0; j<text.getElement(i).length; j++) {
+                        String s = text.getElement(i)[j];
+                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                        s = s.trim();
+                        if (!s.equals("")) {
+                            if (!words.contains(s)) {
+                                words.insert(s);
+                            }
+                            if (!words.get(s).getRecurrences().contains(file)) {
+                                words.get(s).getRecurrences().addLast(file);
+                            }
+                            words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
+
+                        }
+                    }
+                }
+
+            }
+    }
+
 }
