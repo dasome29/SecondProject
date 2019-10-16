@@ -23,7 +23,7 @@ public class Node {
      *  Constructor del nodo
      * @param element
      */
-    Node(String element){
+    public Node(String element){
         this.element = element;
     }
 
