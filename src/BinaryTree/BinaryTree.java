@@ -26,7 +26,7 @@ public class BinaryTree{
      * @return true en caso que sí lo contenga, false en caso contrario
      */
     public boolean contains(String element){
-        return this.contains(element, root);
+        return contains(element, root);
     }
 
     /**

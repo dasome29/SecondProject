@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import jdk.jshell.EvalException;
+
 
 import java.io.File;
 import java.nio.file.Files;
@@ -26,9 +26,9 @@ public class DocumentsLibrary {
 
 
     public DocumentsLibrary(Pane libraryPane, Pane paneButtons, DocumentReader documentReader){
-        this.libraryPane = libraryPane;
-        this.paneButtons = paneButtons;
-        this.documentReader = documentReader;
+        DocumentsLibrary.libraryPane = libraryPane;
+        DocumentsLibrary.paneButtons = paneButtons;
+        DocumentsLibrary.documentReader = documentReader;
 
         Button button = new Button("Update");
         button.setLayoutY(10);

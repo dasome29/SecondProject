@@ -15,8 +15,8 @@ public class Node {
     LinkedArrayList<File> recurrences = new LinkedArrayList<File>();
     //private LinkedArrayList<LinkedArrayList<LinkedArrayList>> recurrences = new LinkedArrayList<LinkedArrayList<LinkedArrayList>>();
 
-    Node left;
-    Node right;
+    public Node left;
+    public Node right;
 
 
     /**
