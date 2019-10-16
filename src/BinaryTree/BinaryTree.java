@@ -159,6 +159,7 @@ public class BinaryTree{
         return c;
     }
 
+
     public Node getLast() {
         return last;
     }
