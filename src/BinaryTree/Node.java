@@ -1,10 +1,7 @@
 package BinaryTree;
 
-import FileReader.DocumentFormat;
 import LinkedArrayList.LinkedArrayList;
-
 import java.io.File;
-
 
 /**
  * Nodo del árbol binario
@@ -23,7 +20,7 @@ public class Node {
      *  Constructor del nodo
      * @param element
      */
-    public Node(String element){
+    Node(String element){
         this.element = element;
     }
 
