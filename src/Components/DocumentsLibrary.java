@@ -1,4 +1,4 @@
-package GUI;
+package Components;
 
 import FileReader.DocumentReader;
 import LinkedArrayList.LinkedArrayList;

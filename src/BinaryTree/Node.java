@@ -11,19 +11,19 @@ import java.io.File;
  */
 
 public class Node {
-    public String element;
-    public LinkedArrayList<File> recurrences = new LinkedArrayList<File>();
+    String element;
+    LinkedArrayList<File> recurrences = new LinkedArrayList<File>();
     //private LinkedArrayList<LinkedArrayList<LinkedArrayList>> recurrences = new LinkedArrayList<LinkedArrayList<LinkedArrayList>>();
 
-    public Node left;
-    public Node right;
+    Node left;
+    Node right;
 
 
     /**
      *  Constructor del nodo
      * @param element
      */
-    public Node(String element){
+    Node(String element){
         this.element = element;
     }
 

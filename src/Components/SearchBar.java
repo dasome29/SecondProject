@@ -1,8 +1,7 @@
-package GUI;
+package Components;
 
 import FileReader.DocumentFormat;
 import FileReader.DocumentReader;
-import FileReader.SortDocumentsBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -25,8 +24,6 @@ public class SearchBar{
     private ToggleGroup searchBy;
     private RadioButton searchByWord;
     private RadioButton searchByPhrase;
-    private String word;
-    private String phase;
     public static LinkedArrayList<File> listOfWords;
     public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
@@ -34,7 +31,7 @@ public class SearchBar{
     public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
-    SearchBar(Pane root, DocumentReader documentReader){
+    public SearchBar(Pane root, DocumentReader documentReader){
         this.root = root;
         this.documentReader = documentReader;
 
@@ -42,7 +39,7 @@ public class SearchBar{
 
     }
 
-    void setSearchBar() {
+    public void setSearchBar() {
 
         sortDocumentsBar = new SortDocumentsBar(root);
 
@@ -116,9 +113,10 @@ public class SearchBar{
                     resetResults();
                     String[] string = textField.getText().split(" ");
                     listOfWords = documentReader.words.get(string[0]).getRecurrences();
-                    searchPhase(string);
+                    searchPhrase(string);
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
+                e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Content", ButtonType.OK);
                 alert.setHeaderText("No existe ninguna palabra o frase para buscar");
                 alert.setContentText("Por favor introduzca una palabra o frase para realizar la búsqueda");
@@ -129,36 +127,43 @@ public class SearchBar{
     };
 
 
-    private void searchPhase(String[] phase){
+    private void searchPhrase(String[] phase){
         int posy = 10;
         for(int i=0; i < listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
-            String[] text = DocumentFormat.verifyFormat(file);
-            if(searchPhase(text, phase)){
-                System.out.println("La frase se encuentra en alguno de los documentos");
-                Results results=  new Results(searchingResultsPane, file, word, posy);
-                resultsList.addLast(results);
-                posy +=100;
+            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+            assert text != null;
+            for (int j = 0; j < text.getSize(); j++) {
+                if (searchPhrase(text.getElement(j), phase)) {
+                    Results results = new Results(searchingResultsPane, file, phase, posy);
+                    resultsList.addLast(results);
+                    posy += 250;
+                }
             }
 
         }
     }
-    private boolean searchPhase(String[] text, String[] phase){
+    private boolean searchPhrase(String[] text, String[] phase){
         int index = 0;
-        for(int i=0; i< text.length; i++){
-            if(text[i].equals(phase[index]) ){
-                if(index == phase.length -1){
+        System.out.println(text.length );
+        for (int i=0; i<text.length; i++) {
+            if (text[i].equals(phase[index])) {
+                System.out.println(index +"  " +  (phase.length -1));
+                if (index == phase.length -1) {
+                    System.out.println("Es verdad");
                     return true;
-                }else {
-                    index++;
                 }
+                index++;
+                System.out.println("No son iguales");
             }
         }
+
+        System.out.println();
         return false;
     }
 
 
-    public static void addDocumentsToScreen(String word) {
+    private static void addDocumentsToScreen(String word) {
         int posy = 10;
         searchingResultsPane.getChildren().clear();
         for(int i=0; i< listOfWords.getSize(); i++){
@@ -177,6 +182,7 @@ public class SearchBar{
         int posy = 10;
         for(int i=0; i < resultsList.getSize(); i++){
             Results results = resultsList.getElement(i);
+            System.out.println(results.file.getName() + "   " + posy);
             results.pane.setLayoutY(posy);
             if(posy > searchingResultsPane.getHeight()){
                 searchingResultsPane.setPrefHeight(posy +150);

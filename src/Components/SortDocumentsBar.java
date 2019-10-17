@@ -1,7 +1,7 @@
-package FileReader;
+package Components;
 
-import GUI.Results;
-import GUI.SearchBar;
+import Components.Results;
+import Components.SearchBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -199,8 +199,7 @@ public class SortDocumentsBar {
     private FileTime getFileTime(File file) throws IOException {
         BasicFileAttributes attributes;
         attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-        FileTime file1Time = attributes.creationTime();
-        return file1Time;
+        return attributes.creationTime();
     }
 
 
@@ -280,4 +279,6 @@ public class SortDocumentsBar {
         }
         return newList;
     }
+
+
 }
