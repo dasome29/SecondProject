@@ -53,8 +53,6 @@ public class DocumentsLibrary {
 
         checkButtonList = new LinkedArrayList<CheckBox>();
 
-
-
     }
 
 
@@ -120,5 +118,5 @@ public class DocumentsLibrary {
     };
 
 
-    
+
 }

@@ -1,10 +1,7 @@
 package BinaryTree;
 
-import FileReader.DocumentFormat;
 import LinkedArrayList.LinkedArrayList;
-
 import java.io.File;
-
 
 /**
  * Nodo del árbol binario
@@ -15,8 +12,8 @@ public class Node {
     LinkedArrayList<File> recurrences = new LinkedArrayList<File>();
     //private LinkedArrayList<LinkedArrayList<LinkedArrayList>> recurrences = new LinkedArrayList<LinkedArrayList<LinkedArrayList>>();
 
-    Node left;
-    Node right;
+    public Node left;
+    public Node right;
 
 
     /**
@@ -57,6 +54,13 @@ public class Node {
             }
         }
         return result;
+    }
+    public void deleteDoc(File file){
+        for (int i = 0; i < recurrences.getSize(); i++) {
+            if (recurrences.getElement(i).getElement(0).getElement(0).equals(file)){
+                recurrences.delete(i);
+            }
+        }
     }
 
      */

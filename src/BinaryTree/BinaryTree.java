@@ -26,7 +26,7 @@ public class BinaryTree{
      * @return true en caso que sí lo contenga, false en caso contrario
      */
     public boolean contains(String element){
-        return this.contains(element, root);
+        return contains(element, root);
     }
 
     /**
@@ -57,7 +57,7 @@ public class BinaryTree{
      * @return Nodo de la palabra
      */
     public Node get(String name){
-        return this.get(name, root);
+        return get(name, root);
 
 
     }
@@ -137,7 +137,7 @@ public class BinaryTree{
             return null;
         }
         if (element.compareTo(c.element)<0){
-            c. left = remove(element, c.left);
+            c.left = remove(element, c.left);
         }
         else if(element.compareTo(c.element) > 0){
             c.right = remove(element, c.right);

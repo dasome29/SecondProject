@@ -43,27 +43,7 @@ public class DocumentReader {
         if (!documentAlreadyExist(file)){
                 documents.addLast(file); // Se agrega a la lista de documentos de la aplicación
                 DocumentsLibrary.addNewFileToLibrary(file);
-            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
-            if(text != null){
-                for(int i=0; i<text.getSize(); i++) {
-                    for (int j=0; j<text.getElement(i).length; j++) {
-                        String word = text.getElement(i)[j];
-                        word = word.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
-                        word = word.trim();
-                        if (!word.equals("")) {
-                            if (!words.contains(word)) {
-                                words.insert(word);
-                            }
-                            if (!words.get(word).getRecurrences().contains(file)) {
-                                words.get(word).getRecurrences().addLast(file);
-                            }
-                            words.get(word).getRecurrences().getPositions(file).addLast(new int[] {i,j});
-
-                        }
-                    }
-                }
-
-            }
+            updateDocuments(file);
         }
 
     }
@@ -71,6 +51,75 @@ public class DocumentReader {
 
 
 
+
+    /**
+     * Verifica si el documentos que se quiere agregar ya existe en la biblioteca
+     * @param fileToAdd documento a agregar
+     * @return true en caso de que ya existe, false en caso contrario
+     */
+    private boolean documentAlreadyExist(File fileToAdd){
+        for(int i=0; i<documents.getSize(); i++){
+            File file = documents.getElement(i);
+            if(file.equals(fileToAdd)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private LinkedArrayList<int[]> recurrences(LinkedArrayList<String[]> text, String word){
+        LinkedArrayList<int[]> mat = new LinkedArrayList<int[]>();
+        for (int i = 0; i < text.getSize(); i++) {
+            String[] array = text.getElement(i);
+            for (int j = 0; j < array.length; j++) {
+                if (array[j].equals(word)){
+                    mat.addLast(new int [] {i,j});
+                }
+            }
+        }
+        return mat;
+    }
+    private void deleteFile(File file) {
+        LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+        if (documents.contains(file) && text != null) {
+            for (int i = 0; i < text.getSize(); i++) {
+                for (int j = 0; j < text.getElement(i).length; j++) {
+                    String s = text.getElement(i)[j];
+                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                    s = s.trim();
+                    if (!s.equals("")) {
+                        words.get(s).getRecurrences().deleteElement(file);
+                    }
+                }
+            }
+            documents.deleteElement(file);
+        }
+    }
+    public void updateDocuments(File file){
+        LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+        if(text != null){
+            for(int i=0; i<text.getSize(); i++) {
+                for (int j=0; j<text.getElement(i).length; j++) {
+                    String s = text.getElement(i)[j];
+                    s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
+                    s = s.trim();
+//                    System.out.println("|"+s+"|");
+                    if (!s.equals("")) {
+                        if (!words.contains(s)) {
+                            words.insert(s);
+                        }
+                        if (!words.get(s).getRecurrences().contains(file)) {
+                            words.get(s).getRecurrences().addLast(file);
+                        }
+                        words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
+                    }
+                }
+            }
+        }
+        for (String s : text.getElement(6)) {
+            System.out.println(s);
+        }
+    }
 
     /**
      * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
@@ -117,68 +166,6 @@ public class DocumentReader {
 
 
 
-//    void deleteFile(File file) {
-//        String[] text = DocumentFormat.verifyFormat(file);
-//        assert text != null;
-//        for (String s : text){
-//            words.get(s).getRecurrences().deleteElement(file);
-//            if (words.get(s).getRecurrences().getSize()==0){
-//                words.remove(s);
-//            }
-//        }
-//        documents.deleteElement(file);
-//
-//    }
 
-    /**
-     * Verifica si el documentos que se quiere agregar ya existe en la biblioteca
-     * @param fileToAdd documento a agregar
-     * @return true en caso de que ya existe, false en caso contrario
-     */
-    private boolean documentAlreadyExist(File fileToAdd){
-        for(int i=0; i<documents.getSize(); i++){
-            File file = documents.getElement(i);
-            if(file.equals(fileToAdd)){
-                return true;
-            }
-        }
-        return false;
-    }
-    private LinkedArrayList<int[]> recurrences(LinkedArrayList<String[]> text, String word){
-        LinkedArrayList<int[]> mat = new LinkedArrayList<int[]>();
-        for (int i = 0; i < text.getSize(); i++) {
-            String[] array = text.getElement(i);
-            for (int j = 0; j < array.length; j++) {
-                if (array[j].equals(word)){
-                    mat.addLast(new int [] {i,j});
-                }
-            }
-        }
-        return mat;
-    }
-
-    public void updateDocuments(File file){
-            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
-            if(text != null){
-                for(int i=0; i<text.getSize(); i++) {
-                    for (int j=0; j<text.getElement(i).length; j++) {
-                        String s = text.getElement(i)[j];
-                        s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
-                        s = s.trim();
-                        if (!s.equals("")) {
-                            if (!words.contains(s)) {
-                                words.insert(s);
-                            }
-                            if (!words.get(s).getRecurrences().contains(file)) {
-                                words.get(s).getRecurrences().addLast(file);
-                            }
-                            words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
-
-                        }
-                    }
-                }
-
-            }
-    }
 
 }
