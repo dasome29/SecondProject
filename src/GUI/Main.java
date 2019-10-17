@@ -26,7 +26,7 @@ public class Main extends Application {
     private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
-    public static DocumentReader documentReader = new DocumentReader();
+    public DocumentReader documentReader = new DocumentReader();
 
 
     @Override
@@ -62,55 +62,11 @@ public class Main extends Application {
         DocumentsLibrary documentsLibrary = new DocumentsLibrary(documentsScroll, pane, documentReader);
 
 
-        Button addNewFile = new Button("Add File");
-        addNewFile.setLayoutX(275);
-        addNewFile.setLayoutY(850);
-        addNewFile.setOnMouseClicked(newFile);
-        pane.getChildren().addAll(addNewFile);
-
-
-        Button addNewFolder = new Button("Add Folder");
-        addNewFolder.setLayoutX(150);
-        addNewFolder.setLayoutY(850);
-        addNewFolder.setOnMouseClicked(newFolder);
-        pane.getChildren().addAll(addNewFolder);
-
-
         //Stage principal
         primaryStage.setTitle("Text finder");
         primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
     }
-
-
-    EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            DirectoryChooser directoryChooser = new DirectoryChooser();
-            directoryChooser.setInitialDirectory(new File("/home"));
-            File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
-            if(seletedFiles != null) {
-                documentReader.documentReader(seletedFiles);
-            }
-
-        }
-    };
-
-    EventHandler<MouseEvent> newFile = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("/home"));
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF files", "*.pdf"),
-                    new FileChooser.ExtensionFilter("TXT files", "*.txt"), new FileChooser.ExtensionFilter("DOCX files", "*.docx"));
-            File selectedFile = fileChooser.showOpenDialog(null);
-
-            if(selectedFile != null) {
-                documentReader.documentReader2(selectedFile);
-            }
-
-        }
-    };
 
 
     public static void main(String[] args) {

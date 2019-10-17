@@ -11,6 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import jdk.jshell.EvalException;
 
 import java.io.File;
@@ -36,7 +38,22 @@ public class DocumentsLibrary {
         button.setOnMouseClicked(updateEvent);
         paneButtons.getChildren().add(button);
 
+        Button addNewFile = new Button("Add File");
+        addNewFile.setLayoutX(275);
+        addNewFile.setLayoutY(850);
+        addNewFile.setOnMouseClicked(newFile);
+        paneButtons.getChildren().addAll(addNewFile);
+
+
+        Button addNewFolder = new Button("Add Folder");
+        addNewFolder.setLayoutX(150);
+        addNewFolder.setLayoutY(850);
+        addNewFolder.setOnMouseClicked(newFolder);
+        paneButtons.getChildren().addAll(addNewFolder);
+
         checkButtonList = new LinkedArrayList<CheckBox>();
+
+
 
     }
 
@@ -69,6 +86,36 @@ public class DocumentsLibrary {
         @Override
         public void handle(MouseEvent event) {
             updateDocuments();
+        }
+    };
+
+
+    EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            DirectoryChooser directoryChooser = new DirectoryChooser();
+            directoryChooser.setInitialDirectory(new File("/home"));
+            File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
+            if(seletedFiles != null) {
+                documentReader.documentReader(seletedFiles);
+            }
+
+        }
+    };
+
+    EventHandler<MouseEvent> newFile = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("/home"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF files", "*.pdf"),
+                    new FileChooser.ExtensionFilter("TXT files", "*.txt"), new FileChooser.ExtensionFilter("DOCX files", "*.docx"));
+            File selectedFile = fileChooser.showOpenDialog(null);
+
+            if(selectedFile != null) {
+                documentReader.documentReader2(selectedFile);
+            }
+
         }
     };
 
