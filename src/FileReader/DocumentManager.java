@@ -10,13 +10,13 @@ import java.io.File;
 /**
  * Clase la cual lee cada documento que ingresa a la biblioteca e realiza parte de la indizacion
  */
-public class DocumentReader {
+public class DocumentManager {
     public static BinaryTree words = new BinaryTree();
     private LinkedArrayList<String> documentContent = new LinkedArrayList<String>();
     public static LinkedArrayList<File> documents = new LinkedArrayList<File>();
 
 
-    public DocumentReader() { }
+    public DocumentManager() { }
 
 
 
@@ -28,7 +28,6 @@ public class DocumentReader {
 
     public void documentReader(File[] files) {
         LinkedArrayList<File> linkedArrayListFiles = DocumentFormat.filterExtensions(files);
-        System.out.println(linkedArrayListFiles.getSize());
         for (int i = 0; i < linkedArrayListFiles.getSize(); i++) {
             File file = linkedArrayListFiles.getElement(i);
             documentReader2(file);
@@ -49,9 +48,6 @@ public class DocumentReader {
     }
 
 
-
-
-
     /**
      * Verifica si el documentos que se quiere agregar ya existe en la biblioteca
      * @param fileToAdd documento a agregar
@@ -67,19 +63,9 @@ public class DocumentReader {
         return false;
     }
 
-    private LinkedArrayList<int[]> recurrences(LinkedArrayList<String[]> text, String word){
-        LinkedArrayList<int[]> mat = new LinkedArrayList<int[]>();
-        for (int i = 0; i < text.getSize(); i++) {
-            String[] array = text.getElement(i);
-            for (int j = 0; j < array.length; j++) {
-                if (array[j].equals(word)){
-                    mat.addLast(new int [] {i,j});
-                }
-            }
-        }
-        return mat;
-    }
-    private void deleteFile(File file) {
+
+
+    public void deleteFile(File file) {
         LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
         if (documents.contains(file) && text != null) {
             for (int i = 0; i < text.getSize(); i++) {
@@ -88,13 +74,18 @@ public class DocumentReader {
                     s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
                     s = s.trim();
                     if (!s.equals("")) {
-                        words.get(s).getRecurrences().deleteElement(file);
+                        if(words.contains(s)) {
+                            words.get(s).getRecurrences().deleteElement(file);
+                        }
+
                     }
                 }
             }
             documents.deleteElement(file);
         }
     }
+
+
     public void updateDocuments(File file){
         LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
         if(text != null){
@@ -103,7 +94,7 @@ public class DocumentReader {
                     String s = text.getElement(i)[j];
                     s = s.replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ");
                     s = s.trim();
-//                    System.out.println("|"+s+"|");
+                    System.out.println("Se agrega " + s);
                     if (!s.equals("")) {
                         if (!words.contains(s)) {
                             words.insert(s);
@@ -111,24 +102,18 @@ public class DocumentReader {
                         if (!words.get(s).getRecurrences().contains(file)) {
                             words.get(s).getRecurrences().addLast(file);
                         }
-                        words.get(s).getRecurrences().getPositions(file).addLast(new int[] {i,j});
+                        if(!words.get(s).getRecurrences().getPositions(file).contains(i)) {
+                            words.get(s).getRecurrences().getPositions(file).addLast(i);
+                        }
                     }
                 }
             }
         }
-        for (String s : text.getElement(6)) {
-            System.out.println(s);
-        }
     }
-
-    /**
-     * Documento que recibe un solo documentos y realiza parte de la indizacion de este.
-     * @param file documento a agrega
-     */
 
 
     /*
-    public void documentReader(File file){
+    public void documentManager(File file){
         if (!documentAlreadyExist(file)) {
             documents.addLast(file);
             DocumentsLibrary.addNewFileToLibrary(file);
@@ -163,6 +148,19 @@ public class DocumentReader {
     }
 
      */
+
+    private LinkedArrayList<int[]> recurrences(LinkedArrayList<String[]> text, String word){
+        LinkedArrayList<int[]> mat = new LinkedArrayList<int[]>();
+        for (int i = 0; i < text.getSize(); i++) {
+            String[] array = text.getElement(i);
+            for (int j = 0; j < array.length; j++) {
+                if (array[j].equals(word)){
+                    mat.addLast(new int [] {i,j});
+                }
+            }
+        }
+        return mat;
+    }
 
 
 

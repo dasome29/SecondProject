@@ -103,13 +103,11 @@ public class DocumentFormat {
         LinkedArrayList<String[]> result = new LinkedArrayList<String[]>();
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
-            System.out.println("Entra");
             XWPFDocument xwpfDocument = new XWPFDocument(fileInputStream);
             XWPFWordExtractor extractor = new XWPFWordExtractor(xwpfDocument);
             String[] doc = extractor.getText().split("\n");
             for (String s : doc) {
                 result.addLast(s.split(" "));
-                System.out.println();
             }
 
             return result;

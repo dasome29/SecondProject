@@ -1,22 +1,27 @@
 package Components;
 
 import FileReader.DocumentFormat;
-import FileReader.DocumentReader;
+import FileReader.DocumentManager;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class Results {
     public Pane pane;
@@ -26,40 +31,43 @@ public class Results {
     private String word;
     private String[] phase;
     private int posy;
+    private int start, end;
     public int Filesize;
+    public TextFlow textFlow;
     private LinkedArrayList<String[]> text;
-    private LinkedArrayList<int[]> index;
+    private LinkedArrayList<Integer> index;
 
 
-    public Results(Pane searchingResultsPane, File file, String[] phase, int posy){
+    public Results(Pane searchingResultsPane, File file, String[] phase, int posy) {
         this.searchingResultsPane = searchingResultsPane;
         this.file = file;
         this.posy = posy;
         this.phase = phase;
-        this.Filesize = (int)file.length();
+        this.Filesize = (int) file.length();
         setResultPane();
         addTextPhase();
     }
 
 
-    public Results(Pane searchingResultsPane, File file, String word, int posy){
+    public Results(Pane searchingResultsPane, File file, String word, int posy) {
         this.searchingResultsPane = searchingResultsPane;
         this.file = file;
         this.posy = posy;
         this.word = word;
-        this.Filesize = (int)file.length();
+        this.Filesize = (int) file.length();
+
         setResultPane();
-        addTextWord();
+        //addTextWord(word);
 
 
     }
 
 
-    public void setResultPane(){
+    public void setResultPane() {
 
         pane = new Pane();
         pane.setPrefSize(520, 250);
-        pane.setBackground(new Background(new BackgroundFill(Color.rgb(144,40,40), CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setBackground(new Background(new BackgroundFill(Color.rgb(144, 40, 40), CornerRadii.EMPTY, Insets.EMPTY)));
         pane.setLayoutX(10);
         pane.setLayoutY(posy);
 
@@ -67,7 +75,7 @@ public class Results {
         label.setLayoutX(3);
         label.setLayoutY(5);
         label.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        label.setTextFill(Color.rgb(255,255,255));
+        label.setTextFill(Color.rgb(255, 255, 255));
         pane.getChildren().add(label);
 
 
@@ -79,12 +87,16 @@ public class Results {
         pane.getChildren().addAll(button);
 
 
+        textFlow = new TextFlow();
+        textFlow.setPrefSize(520, 220);
+        //textFlow.setMaxSize(520,520);
+        textFlow.setLayoutX(30);
+        //pane.getChildren().add(textFlow);
 
-        textArea = new TextArea(file.getName());
-        textArea.setPrefSize(520, 220);
-        textArea.setEditable(false);
-        textArea.setLayoutY(30);
-        pane.getChildren().add(textArea);
+        ScrollPane scrollPane = new ScrollPane(textFlow);
+        scrollPane.setLayoutY(30);
+        scrollPane.setMaxSize(520, 220);
+        pane.getChildren().add(scrollPane);
 
 
         searchingResultsPane.getChildren().add(pane);
@@ -104,67 +116,94 @@ public class Results {
     /**
      * Método utilizado para agregar el texto en el TextArea en caso de que se busque una palabra individual
      */
-    private void addTextWord(){
-        text = DocumentFormat.verifyFormat(file);
-        System.out.println("La palabra es " + word);
-        index = DocumentReader.words.get(word).getRecurrences().getPositions(file);
-        String content = "";
-        for(int i=0; i< index.getSize(); i++) {
-            for(int x=-1; x<=1; x++ ) {
-                    String[] line = text.getElement(index.getElement((i))[0] + x);
-                    for (int j = 0; j < line.length; j++) {
-                        if (line[j].equals(word)) {
-                        }
-                        content += line[j] + " ";
-                    }
-                    content += "\n";
-                }
-                content += "\n\n";
-            }
-        textArea.setText(content);
-    }
+
 
 
     private void addTextPhase() {
         text = DocumentFormat.verifyFormat(file);
-        index = DocumentReader.words.get(phase[0]).getRecurrences().getPositions(file);
+        index = DocumentManager.words.get(phase[0]).getRecurrences().getPositions(file);
         StringBuilder content = new StringBuilder();
-        for(int i=0; i<index.getSize(); i++){
-            if(searchPhrase(text.getElement(index.getElement(i)[0]), phase)){
+        for (int i = 0; i < index.getSize(); i++) {
+            if (searchPhrase(text.getElement(index.getElement(i)), phase)){
+                int Index = index.getElement(i);
                 for(int x=-1; x<=1; x++){
-                    String[] lineToAdd = text.getElement(index.getElement(i)[0] + x);
-                    for(int j=0; j< lineToAdd.length; j++){
-                        content.append(lineToAdd[j]);
-                        content.append(" ");
+                    String[] line = text.getElement(Index+x);
+                    if(Index+x == Index){
+                        setHightLight(line, phase);
+                        if(searchPhrase(text.getElement(i+1), phase)){
+                            setHightLight(text.getElement(i+1), phase);
+                            i++;
+                        }
                     }
-                    content.append("\n");
-                }
-                content.append("\n\n");
-                System.out.println(content);
+                    else{
+                        for(int j=0; j<line.length; j++){
+                            content.append(line[j] + " ");
 
+                        }
+                        content.append("\n");
+                        textFlow.getChildren().add(new Text(content.toString()));
+                        content.delete(0, content.length());
+                    }
+                }
+                textFlow.getChildren().add(new Text("\n\n\n"));
             }
         }
-        textArea.setText(content.toString());
-
     }
+
+    private void setHightLight(String[] line, String[] phase) {
+        StringBuilder textBeforeOrAfterWord = new StringBuilder();
+        StringBuilder phaseString = new StringBuilder();
+
+        for(int i=0; i<start; i++){
+            textBeforeOrAfterWord.append(line[i]+ " ");
+        }
+        textBeforeOrAfterWord.append(" ");
+        textFlow.getChildren().add(new Text(textBeforeOrAfterWord.toString()));
+        textBeforeOrAfterWord.delete(0, textBeforeOrAfterWord.length());
+        for(int i=start; i<=end; i++ ){
+            phaseString.append(line[i]+ " ");
+        }
+        Text text = new Text(phaseString.toString());
+        text.setFill(Color.web("F3720D"));
+        text.setFont(Font.font("", FontWeight.BOLD, 14));
+        textFlow.getChildren().add(text);
+        for(int i=end+1; i<line.length; i++){
+            textBeforeOrAfterWord.append(line[i]+ " ");
+        }
+        textBeforeOrAfterWord.append(" ");
+        textFlow.getChildren().add(new Text(textBeforeOrAfterWord.toString()));
+        textBeforeOrAfterWord.delete(0, textBeforeOrAfterWord.length());
+}
 
 
     private boolean searchPhrase(String[] text, String[] phase) {
         int index = 0;
         for (int i = 0; i < text.length; i++) {
-            if (text[i].equals(phase[index])) {
-                System.out.println(index + "  " + (phase.length - 1));
-                if (index == phase.length - 1) {
-                    System.out.println("Es verdad");
-                    return true;
-                }
+            if(index==phase.length){return true;}
+            if(text[i].equals(phase[index])){
+                start=i;
                 index++;
-                System.out.println("No son iguales");
+                for(int j=i+1; j<text.length; j++){
+                    String word = text[j].replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ").trim();
+                    if(word.equals("")){continue;}
+                    if(index==phase.length){
+                        end=j-1;
+                        return true;
+                    }
+                    if(word.equals(phase[index])){
+                        end=j;
+                        index++;
+                    }else{
+                        index=0;
+                        break;
+                    }
+
+                }
             }
         }
+        System.out.println("NO CONTIENE LA FRASE");
         return false;
     }
-
 
 
 

@@ -150,6 +150,7 @@ public class BinaryTree{
         }
         return c;
     }
+
     private Node findMin(Node c){
         if (c.left.element.compareTo(c.right.element) > 0 ){
             return findMin(c.left);
@@ -158,6 +159,7 @@ public class BinaryTree{
         }
         return c;
     }
+
 
 
     public Node getLast() {
