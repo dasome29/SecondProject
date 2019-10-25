@@ -1,7 +1,7 @@
 package Components;
 
 import FileReader.DocumentFormat;
-import FileReader.DocumentReader;
+import FileReader.DocumentManager;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,7 +18,7 @@ import java.io.File;
 public class SearchBar{
     private Pane root;
     private Pane searchBar = new Pane();
-    private DocumentReader documentReader;
+    private DocumentManager documentManager;
     private Button searchButton;
     private TextField textField;
     private ToggleGroup searchBy;
@@ -31,11 +31,9 @@ public class SearchBar{
     public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
-    public SearchBar(Pane root, DocumentReader documentReader){
+    public SearchBar(Pane root, DocumentManager documentManager){
         this.root = root;
-        this.documentReader = documentReader;
-
-
+        this.documentManager = documentManager;
 
     }
 
@@ -105,23 +103,18 @@ public class SearchBar{
                 if(searchByWord.isSelected()) {
                     resetResults();
                     String string = textField.getText().trim();
-                    listOfWords = documentReader.words.get(string).getRecurrences();
-                    System.out.println(" Contiene " + string + " " + documentReader.words.contains(string));
+                    System.out.println("EL arbol contiene a " + string + "  " + DocumentManager.words.contains(string));
+                    listOfWords = documentManager.words.get(string).getRecurrences();
+                    System.out.println(" Contiene " + string + " " + documentManager.words.contains(string));
                     addDocumentsToScreen(string);
                 }
                 if(searchByPhrase.isSelected()){
                     resetResults();
                     String[] string = textField.getText().split(" ");
-                    listOfWords = documentReader.words.get(string[0]).getRecurrences();
+                    listOfWords = documentManager.words.get(string[0]).getRecurrences();
                     searchPhrase(string);
                 }
             } catch (NullPointerException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Content", ButtonType.OK);
-                alert.setHeaderText("No existe ninguna palabra o frase para buscar");
-                alert.setContentText("Por favor introduzca una palabra o frase para realizar la búsqueda");
-                alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-                alert.showAndWait();
             }
         }
     };
@@ -137,28 +130,41 @@ public class SearchBar{
                 if (searchPhrase(text.getElement(j), phase)) {
                     Results results = new Results(searchingResultsPane, file, phase, posy);
                     resultsList.addLast(results);
-                    posy += 250;
+                    posy += 280;
                 }
             }
 
         }
     }
-    private boolean searchPhrase(String[] text, String[] phase){
+    private boolean searchPhrase(String[] text, String[] phase) {
         int index = 0;
-        System.out.println(text.length );
-        for (int i=0; i<text.length; i++) {
-            if (text[i].equals(phase[index])) {
-                System.out.println(index +"  " +  (phase.length -1));
-                if (index == phase.length -1) {
-                    System.out.println("Es verdad");
-                    return true;
-                }
+        for (int i = 0; i < text.length; i++) {
+            if(index==phase.length){return true;}
+            if(text[i].equals(phase[index])){
                 index++;
-                System.out.println("No son iguales");
+                for(int j=i+1; j<text.length; j++){
+                    String word = text[j].replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ").trim();
+                    System.out.println("ENTRA");
+                    if(word.equals("")){continue;}
+                    if(index==phase.length){
+                        System.out.println("CONTIENE LA FRASE");
+                        return true;
+                    }
+
+                    if(word.equals(phase[index])){
+                        System.out.println(j + " " + text[j] + " es igual a " + phase[index] +" " + index);
+                        System.out.println();
+                        index++;
+                    }else{
+                        System.out.println(text[j]+ " false"+ phase[index]);
+                        index=0;
+                        break;
+                    }
+
+                }
             }
         }
-
-        System.out.println();
+        System.out.println("NO CONTIENE LA FRASE");
         return false;
     }
 
@@ -168,7 +174,7 @@ public class SearchBar{
         searchingResultsPane.getChildren().clear();
         for(int i=0; i< listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
-            Results results=  new Results(searchingResultsPane, file, word, posy );
+            Results results=  new Results(searchingResultsPane, file, posy );
             resultsList.addLast(results);
             posy += 280;
             if(posy > searchingResultsPane.getHeight()){

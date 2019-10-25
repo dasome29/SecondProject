@@ -153,7 +153,7 @@ public class LinkedArrayList<T> {
         }
     }
 
-    public LinkedArrayList<int[]> getPositions(T object) {
+    public LinkedArrayList<Integer> getPositions(T object) {
         ListNode current = head;
         while (!current.getValue().equals(object)) {
             current = current.getNext();

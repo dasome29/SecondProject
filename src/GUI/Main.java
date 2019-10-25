@@ -2,31 +2,23 @@ package GUI;
 
 import Components.DocumentsLibrary;
 import Components.SearchBar;
+import FileReader.DocumentManager;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import FileReader.DocumentReader;
-
-
-import java.io.*;
 
 public class Main extends Application {
     private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
-    public DocumentReader documentReader = new DocumentReader();
+    public DocumentManager documentManager = new DocumentManager();
 
 
     @Override
@@ -37,7 +29,7 @@ public class Main extends Application {
 
 
         //Se crea la barra de búsqueda de texto
-        SearchBar searchBar = new SearchBar(root, documentReader);
+        SearchBar searchBar = new SearchBar(root, documentManager);
         searchBar.setSearchBar();
 
 
@@ -59,11 +51,12 @@ public class Main extends Application {
         ScrollPane scrollPane = new ScrollPane(documentsScroll);
         pane.getChildren().addAll(scrollPane);
 
-        DocumentsLibrary documentsLibrary = new DocumentsLibrary(documentsScroll, pane, documentReader);
+        DocumentsLibrary documentsLibrary = new DocumentsLibrary(documentsScroll, pane, documentManager);
 
 
         //Stage principal
         primaryStage.setTitle("Text finder");
+        primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
     }

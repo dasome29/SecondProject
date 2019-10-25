@@ -1,11 +1,11 @@
 package Components;
 
-import FileReader.DocumentReader;
+import FileReader.DocumentManager;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,27 +16,36 @@ import javafx.stage.FileChooser;
 
 
 import java.io.File;
-import java.nio.file.Files;
+
+/**
+ */
 
 public class DocumentsLibrary {
-    private static LinkedArrayList<File> documents = DocumentReader.documents;
-    private static  LinkedArrayList<CheckBox> checkButtonList;
-    private static DocumentReader documentReader;
+    private static LinkedArrayList<File> documents = DocumentManager.documents;
+    private static LinkedArrayList<CheckBox> checkButtonList;
+    private static DocumentManager documentManager;
     private static Pane libraryPane;
     private static Pane paneButtons;
     private static int posy = 20;
+    public static boolean deleting;
 
 
-    public DocumentsLibrary(Pane libraryPane, Pane paneButtons, DocumentReader documentReader){
-        DocumentsLibrary.libraryPane = libraryPane;
-        DocumentsLibrary.paneButtons = paneButtons;
-        DocumentsLibrary.documentReader = documentReader;
+    public DocumentsLibrary(Pane libraryPane, Pane paneButtons, DocumentManager documentManager) {
+        this.libraryPane = libraryPane;
+        this.paneButtons = paneButtons;
+        this.documentManager = documentManager;
 
-        Button button = new Button("Update");
-        button.setLayoutY(10);
-        button.setLayoutY(850);
-        button.setOnMouseClicked(updateEvent);
-        paneButtons.getChildren().add(button);
+        Button update = new Button("Update");
+        update.setLayoutX(20);
+        update.setLayoutY(850);
+        update.setOnMouseClicked(updateEvent);
+        paneButtons.getChildren().add(update);
+
+        Button delete = new Button("Delete");
+        delete.setLayoutX(90);
+        delete.setLayoutY(850);
+        delete.setOnMouseClicked(deleteFile);
+        paneButtons.getChildren().add(delete);
 
         Button addNewFile = new Button("Add File");
         addNewFile.setLayoutX(275);
@@ -46,24 +55,22 @@ public class DocumentsLibrary {
 
 
         Button addNewFolder = new Button("Add Folder");
-        addNewFolder.setLayoutX(150);
+        addNewFolder.setLayoutX(180);
         addNewFolder.setLayoutY(850);
         addNewFolder.setOnMouseClicked(newFolder);
         paneButtons.getChildren().addAll(addNewFolder);
 
         checkButtonList = new LinkedArrayList<CheckBox>();
 
-
-
     }
 
 
-    public static void addNewFileToLibrary(File file){
+    public static void addNewFileToLibrary(File file) {
         CheckBox button = new CheckBox();
         button.setLayoutX(20);
         button.setLayoutY(posy);
         button.setText(file.getName());
-        button.setTextFill(Color.rgb(255,255,255));
+        button.setTextFill(Color.rgb(255, 255, 255));
         button.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         button.setUserData(file);
         checkButtonList.addLast(button);
@@ -72,38 +79,62 @@ public class DocumentsLibrary {
     }
 
 
-    public static void updateDocuments(){
-        for(int i=0; i< documents.getSize(); i++){
-            documentReader.updateDocuments(documents.getElement(i));
-            System.out.println("ACTUALIZANDO");
-            System.out.println();
-
+    public void updateDocuments() {
+        for (int i = 0; i < checkButtonList.getSize(); i++) {
+            if (checkButtonList.getElement(i).isSelected()) {
+                File file = (File) checkButtonList.getElement(i).getUserData();
+                documentManager.deleteFile(file);
+                documentManager.updateDocuments(file);
+            }
         }
     }
 
 
-    private EventHandler<MouseEvent> updateEvent = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            updateDocuments();
+    private void deleteFiles() {
+        deleting = true;
+        for (int i = 0; i < checkButtonList.getSize(); i++) {
+            CheckBox fileButton = checkButtonList.getElement(i);
+            if (fileButton.isSelected()) {
+                File file = (File) fileButton.getUserData();
+                System.out.println("Se eliminan");
+                documentManager.deleteFile(file);
+                libraryPane.getChildren().remove(fileButton);
+                checkButtonList.delete(i);
+                System.out.println("Sale");
+            }
         }
-    };
+        deleting= false;
+        updatePositions();
+    }
 
 
-    EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
+    private void updatePositions(){
+        posy =20;
+        for(int i=0; i< checkButtonList.getSize(); i++){
+            System.out.println("Se actualizan posiciones");
+            checkButtonList.getElement(i).setLayoutY(posy);
+            posy +=50;
+        }
+    }
+
+
+    private EventHandler<MouseEvent> updateEvent = event -> updateDocuments();
+
+
+    private EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             DirectoryChooser directoryChooser = new DirectoryChooser();
             directoryChooser.setInitialDirectory(new File("/home"));
             File[] seletedFiles = directoryChooser.showDialog(null).listFiles();
             if(seletedFiles != null) {
-                documentReader.documentReader(seletedFiles);
+                documentManager.documentReader(seletedFiles);
             }
 
         }
     };
 
-    EventHandler<MouseEvent> newFile = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> newFile = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
             FileChooser fileChooser = new FileChooser();
@@ -112,13 +143,15 @@ public class DocumentsLibrary {
                     new FileChooser.ExtensionFilter("TXT files", "*.txt"), new FileChooser.ExtensionFilter("DOCX files", "*.docx"));
             File selectedFile = fileChooser.showOpenDialog(null);
 
-            if(selectedFile != null) {
-                documentReader.documentReader2(selectedFile);
+            if (selectedFile != null) {
+                documentManager.documentReader2(selectedFile);
             }
 
         }
     };
 
+
+    private EventHandler<MouseEvent> deleteFile = event -> deleteFiles();
 
 
 }

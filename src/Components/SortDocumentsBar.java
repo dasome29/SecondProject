@@ -1,7 +1,5 @@
 package Components;
 
-import Components.Results;
-import Components.SearchBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -246,16 +244,16 @@ public class SortDocumentsBar {
     private static int getMax(LinkedArrayList<Results> list){
         int max = 0;
         for (int i = 0; i < list.getSize(); i++) {
-            if(list.getElement(i).Filesize >max){
-                max=list.getElement(i).Filesize;
+            if(list.getElement(i).FileSize >max){
+                max=list.getElement(i).FileSize;
             }
         }
         return max;
     }
     private static LinkedArrayList<Integer> positions(LinkedArrayList<Integer> nums, int module, LinkedArrayList<Results> list){
         for (int i = 0; i < list.getSize(); i++) {
-            int x = (int) (list.getElement(i).Filesize %module/Math.pow(10, (Math.log10(module)-1)));
-            int y = nums.getElement((int) (((list.getElement(i).Filesize %module)/Math.pow(10, (Math.log10(module)-1)))))+1;
+            int x = (int) (list.getElement(i).FileSize %module/Math.pow(10, (Math.log10(module)-1)));
+            int y = nums.getElement((int) (((list.getElement(i).FileSize %module)/Math.pow(10, (Math.log10(module)-1)))))+1;
             nums.replace(x, y);
         }
         return nums;
@@ -264,14 +262,14 @@ public class SortDocumentsBar {
         LinkedArrayList<Integer> temp = createList(list.getSize());
         LinkedArrayList<Integer> newNums = sumList(nums);
         for (int i = list.getSize()-1; i >= 0; i--) {
-            int num = (int) (list.getElement(i).Filesize %module/Math.pow(10, (Math.log10(module)-1)));
+            int num = (int) (list.getElement(i).FileSize %module/Math.pow(10, (Math.log10(module)-1)));
             newNums.replace(num,newNums.getElement(num)-1 );
-            temp.replace(newNums.getElement(num),list.getElement(i).Filesize);
+            temp.replace(newNums.getElement(num),list.getElement(i).FileSize);
         }
         LinkedArrayList<Results> newList = new LinkedArrayList<Results>();
         for (int i = 0; i < temp.getSize(); i++) {
             for (int j = 0; j < list.getSize(); j++) {
-                if (temp.getElement(i) == list.getElement(j).Filesize){
+                if (temp.getElement(i) == list.getElement(j).FileSize){
                     newList.addLast(list.getElement(j));
                     list.delete(j);
                 }
