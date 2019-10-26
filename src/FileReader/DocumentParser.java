@@ -11,7 +11,8 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import java.io.*;
 
 
-public class DocumentFormat {
+public class DocumentParser {
+
 
 
     /**

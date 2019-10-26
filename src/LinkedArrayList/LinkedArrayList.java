@@ -72,6 +72,7 @@ public class LinkedArrayList<T> {
         }
     }
 
+
     /**
      * Takes the list to its initial state.
      */
@@ -111,7 +112,6 @@ public class LinkedArrayList<T> {
                 temp = temp.getNext();
             }
         }
-        System.out.println(deleted);
     }
 
     /**
@@ -159,8 +159,26 @@ public class LinkedArrayList<T> {
             current = current.getNext();
         }
         return current.getPositions();
+    }
 
-}
+    public Integer getElementIndex(T object){
+        if (head == null) {
+         return null;
+        }
+        else {
+        ListNode<T> temp = head;
+        for (int count = 0; count < size; ++count) {
+            if(temp.getValue().equals(object)){
+                return count;
+            }
+            temp = temp.getNext();
+        }
+        return null;
+    }
+
+
+    }
+
     public void delete(int i) {
         if (i < size && size>0) {
             ListNode<T> temp = head;

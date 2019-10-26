@@ -53,7 +53,10 @@ class ListNode<T> {
         prevx = newPrev;
     }
 
+
+
     LinkedArrayList<Integer> getPositions(){
         return positions;
     }
+
 }

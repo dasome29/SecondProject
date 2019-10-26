@@ -1,7 +1,7 @@
 package GUI;
 
 import Components.DocumentsLibrary;
-import Components.SearchBar;
+import Components.Search;
 import FileReader.DocumentManager;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    private static int posy = 10;
     private Pane root;
     private Pane documentsScroll;
     public DocumentManager documentManager = new DocumentManager();
@@ -26,11 +25,9 @@ public class Main extends Application {
         root = new Pane();
 
 
-
-
         //Se crea la barra de búsqueda de texto
-        SearchBar searchBar = new SearchBar(root, documentManager);
-        searchBar.setSearchBar();
+        Search search = new Search(root, documentManager);
+        search.setSearchBar();
 
 
 

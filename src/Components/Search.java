@@ -1,6 +1,6 @@
 package Components;
 
-import FileReader.DocumentFormat;
+import FileReader.DocumentParser;
 import FileReader.DocumentManager;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
@@ -15,7 +15,11 @@ import javafx.scene.paint.Color;
 
 import java.io.File;
 
-public class SearchBar{
+
+/**
+ * Clase encargada de manejar las búsquedas de texto tanto gráfica como lógicamente
+ */
+public class Search {
     private Pane root;
     private Pane searchBar = new Pane();
     private DocumentManager documentManager;
@@ -27,19 +31,28 @@ public class SearchBar{
     public static LinkedArrayList<File> listOfWords;
     public ScrollPane scrollPaneResults;
     private static Pane searchingResultsPane;
-    private SortDocumentsBar sortDocumentsBar;
+    private SortDocuments sortDocuments;
     public static LinkedArrayList<Results> resultsList = new LinkedArrayList<Results>();
 
 
-    public SearchBar(Pane root, DocumentManager documentManager){
+    /**
+     * Constructor
+     * @param root Panel principal
+     * @param documentManager manager de documentos
+     */
+    public Search(Pane root, DocumentManager documentManager){
         this.root = root;
         this.documentManager = documentManager;
 
     }
 
+    /**
+     * Establece los componentes gráficos de la barra de búsqueda
+     */
+
     public void setSearchBar() {
 
-        sortDocumentsBar = new SortDocumentsBar(root);
+        sortDocuments = new SortDocuments(root);
 
 
         searchingResultsPane = new Pane();
@@ -95,6 +108,9 @@ public class SearchBar{
     }
 
 
+    /**
+     * Evento que se encarga de inicializar la búsqueda cuando se presiona el botón
+     */
 
     private EventHandler<MouseEvent> searchWord = new EventHandler<MouseEvent>() {
         @Override
@@ -120,30 +136,43 @@ public class SearchBar{
     };
 
 
+    /**
+     * Método encargado de recorrer el contenido del documento línea por línea para encontrar la frase
+     * @param phase
+     */
     private void searchPhrase(String[] phase){
         int posy = 10;
         for(int i=0; i < listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
-            LinkedArrayList<String[]> text = DocumentFormat.verifyFormat(file);
+            LinkedArrayList<String[]> text = DocumentParser.verifyFormat(file);
             assert text != null;
             for (int j = 0; j < text.getSize(); j++) {
                 if (searchPhrase(text.getElement(j), phase)) {
+                    System.out.println("SE CREA UN RESULT" + file.getName());
                     Results results = new Results(searchingResultsPane, file, phase, posy);
                     resultsList.addLast(results);
                     posy += 280;
+                    break;
                 }
             }
 
         }
     }
-    private boolean searchPhrase(String[] text, String[] phase) {
+
+    /**
+     * Método que verifica si la frase existe en la línea que entra por parámetra
+     * @param línea línea
+     * @param phase frases
+     * @return true en caso de que exista, false en caso contrario
+     */
+    private boolean searchPhrase(String[] línea, String[] phase) {
         int index = 0;
-        for (int i = 0; i < text.length; i++) {
+        for (int i = 0; i < línea.length; i++) {
             if(index==phase.length){return true;}
-            if(text[i].equals(phase[index])){
+            if(línea[i].equals(phase[index])){
                 index++;
-                for(int j=i+1; j<text.length; j++){
-                    String word = text[j].replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ").trim();
+                for(int j=i+1; j<línea.length; j++){
+                    String word = línea[j].replace(",", " ").replace(".", " ").replace(";", " ").replace("(", " ").replace(")", " ").replace("\n", " ").trim();
                     System.out.println("ENTRA");
                     if(word.equals("")){continue;}
                     if(index==phase.length){
@@ -152,11 +181,11 @@ public class SearchBar{
                     }
 
                     if(word.equals(phase[index])){
-                        System.out.println(j + " " + text[j] + " es igual a " + phase[index] +" " + index);
+                        System.out.println(j + " " + línea[j] + " es igual a " + phase[index] +" " + index);
                         System.out.println();
                         index++;
                     }else{
-                        System.out.println(text[j]+ " false"+ phase[index]);
+                        System.out.println(línea[j]+ " false"+ phase[index]);
                         index=0;
                         break;
                     }
@@ -169,10 +198,15 @@ public class SearchBar{
     }
 
 
+    /**
+     * Método para agregar los resultados en pantalla en caso de ser una palabra individual
+     * @param word palabra buscada
+     */
     private static void addDocumentsToScreen(String word) {
         int posy = 10;
         searchingResultsPane.getChildren().clear();
         for(int i=0; i< listOfWords.getSize(); i++){
+            System.out.println(listOfWords.getSize());
             File file = listOfWords.getElement(i);
             Results results=  new Results(searchingResultsPane, file, word, posy );
             resultsList.addLast(results);
@@ -184,6 +218,9 @@ public class SearchBar{
 
     }
 
+    /**
+     * Método para actualiza las posiciones de los resultados después de ser ordenados por alguna de las tres opciones
+     */
     public static void updatePositions(){
         int posy = 10;
         for(int i=0; i < resultsList.getSize(); i++){
@@ -198,16 +235,13 @@ public class SearchBar{
         }
     }
 
+
+    /**
+     * Método que resetea la lista de resultados para realizar una nueva búsqueda
+     */
     private void resetResults(){
         resultsList.reset();
         searchingResultsPane.getChildren().clear();
     }
-
-
-
-
-
-
-
 
 }

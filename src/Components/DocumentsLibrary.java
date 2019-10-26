@@ -3,7 +3,6 @@ package Components;
 import FileReader.DocumentManager;
 import LinkedArrayList.LinkedArrayList;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.input.MouseEvent;
@@ -17,21 +16,24 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 /**
+ * Biblioteca de documentos
  */
 
 public class DocumentsLibrary {
-    private static LinkedArrayList<File> documents = DocumentManager.documents;
     private static LinkedArrayList<CheckBox> checkButtonList;
     private static DocumentManager documentManager;
     private static Pane libraryPane;
-    private static Pane paneButtons;
     private static int posy = 20;
-    public static boolean deleting;
 
+    /**
+     * Constructor
+     * @param libraryPane panel de documentos
+     * @param paneButtons panel de botones
+     * @param documentManager manager de documentos
+     */
 
     public DocumentsLibrary(Pane libraryPane, Pane paneButtons, DocumentManager documentManager) {
         this.libraryPane = libraryPane;
-        this.paneButtons = paneButtons;
         this.documentManager = documentManager;
 
         Button update = new Button("Update");
@@ -64,6 +66,10 @@ public class DocumentsLibrary {
     }
 
 
+    /**
+     * Método  que agrega un nuevo documento a la biblioteca, se inserta un checkButton con el nombre del documento
+     * @param file documento
+     */
     public static void addNewFileToLibrary(File file) {
         CheckBox button = new CheckBox();
         button.setLayoutX(20);
@@ -78,9 +84,14 @@ public class DocumentsLibrary {
     }
 
 
+    /**
+     * Método que actualiza los documentos seleccionados por el usuario. Primeramente se eliminan de la aplicación para luego
+     * volverlo a incluir con los nuevos cambios
+     */
     public void updateDocuments() {
         for (int i = 0; i < checkButtonList.getSize(); i++) {
             if (checkButtonList.getElement(i).isSelected()) {
+                System.out.println("Se actualiza");
                 File file = (File) checkButtonList.getElement(i).getUserData();
                 documentManager.deleteFile(file);
                 documentManager.updateDocuments(file);
@@ -88,38 +99,50 @@ public class DocumentsLibrary {
         }
     }
 
+    /**
+     * Método que elimina los documentos gráficamente de la biblioteca y llama al método para eliminarlos lógicamente
+     */
 
     private void deleteFiles() {
-        deleting = true;
+        System.out.println(checkButtonList.getSize());
         for (int i = 0; i < checkButtonList.getSize(); i++) {
             CheckBox fileButton = checkButtonList.getElement(i);
+            System.out.println(fileButton.isSelected());
             if (fileButton.isSelected()) {
                 File file = (File) fileButton.getUserData();
                 System.out.println("Se eliminan");
                 documentManager.deleteFile(file);
                 libraryPane.getChildren().remove(fileButton);
                 checkButtonList.delete(i);
-                System.out.println("Sale");
+                i--;
             }
         }
-        deleting= false;
         updatePositions();
     }
 
 
+    /**
+     * Método que actualiza las posiciones de los documentos (botones) después de que se haya realizado alguna eliminación
+     */
     private void updatePositions(){
         posy =20;
         for(int i=0; i< checkButtonList.getSize(); i++){
-            System.out.println("Se actualizan posiciones");
             checkButtonList.getElement(i).setLayoutY(posy);
             posy +=50;
         }
     }
 
 
+    /**
+     * Evento que linkeado al botón update para llamar al método correspondiente
+     */
     private EventHandler<MouseEvent> updateEvent = event -> updateDocuments();
 
 
+    /**
+     * Evento linkeado al botón newFolder, se encarga de abrir el buscador de archivos para directorios y llama al método
+     * para realizar la indización
+     */
     private EventHandler<MouseEvent> newFolder = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -133,6 +156,10 @@ public class DocumentsLibrary {
         }
     };
 
+    /**
+     * Evento linkeado al botón newFolder, se encarga de abrir el buscador de archivos para archivos individuales y llama al método
+     * para realizar la indización
+     */
     private EventHandler<MouseEvent> newFile = new EventHandler<>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -143,13 +170,16 @@ public class DocumentsLibrary {
             File selectedFile = fileChooser.showOpenDialog(null);
 
             if (selectedFile != null) {
-                documentManager.documentReader2(selectedFile);
+                documentManager.documentReader(selectedFile);
             }
 
         }
     };
 
 
+    /**
+     * Evento linkeado al botón delete, se encarga llamar al método correspondiente
+     */
     private EventHandler<MouseEvent> deleteFile = event -> deleteFiles();
 
 

@@ -1,7 +1,5 @@
 package Components;
 
-import Components.Results;
-import Components.SearchBar;
 import LinkedArrayList.LinkedArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +17,7 @@ import java.nio.file.attribute.FileTime;
 /**
  * Clase encargada de controlar el ordenamiento de los resultados
  */
-public class SortDocumentsBar {
+public class SortDocuments {
     private Pane root;
     private Pane sortPane;
     private ToggleGroup toggleGroup;
@@ -32,7 +30,7 @@ public class SortDocumentsBar {
      * Método encargado de establecer la barra de ordenamiento en la parte gráfica de la aplicación
      * @param root panel principal
      */
-    public SortDocumentsBar(Pane root){
+    public SortDocuments(Pane root){
         this.root = root;
 
         sortPane = new Pane();
@@ -83,18 +81,18 @@ public class SortDocumentsBar {
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 try {
                     if (sortByName.isSelected()) {
-                        System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
-                        SortByName(SearchBar.resultsList);
-                        System.out.println("Ordenar por nombre " + SearchBar.listOfWords.getSize());
+                        System.out.println("Ordenar por nombre " + Search.listOfWords.getSize());
+                        SortByName(Search.resultsList);
+                        System.out.println("Ordenar por nombre " + Search.listOfWords.getSize());
 
                     }
                     if (sortBySize.isSelected()) {
                         SortBySize();
-                        System.out.println("Ordenar por tamano " + SearchBar.listOfWords.getSize());
+                        System.out.println("Ordenar por tamano " + Search.listOfWords.getSize());
                     }
                     if (sortByDate.isSelected()) {
-                        SortByDate(SearchBar.resultsList);
-                        System.out.println("Ordenar por fecha de creacion " + SearchBar.listOfWords.getSize());
+                        SortByDate(Search.resultsList);
+                        System.out.println("Ordenar por fecha de creacion " + Search.listOfWords.getSize());
                     }
                 }catch (NullPointerException e){
                     e.printStackTrace();
@@ -112,7 +110,7 @@ public class SortDocumentsBar {
 
     private void SortByName(LinkedArrayList<Results> list){
         quickSort(list,0, list.getSize()-1);
-        SearchBar.updatePositions();
+        Search.updatePositions();
     }
 
 
@@ -185,7 +183,7 @@ public class SortDocumentsBar {
                 }
             }
         }
-        SearchBar.updatePositions();
+        Search.updatePositions();
 
     }
 
@@ -207,11 +205,11 @@ public class SortDocumentsBar {
      * Este método es el encargado de ordenar los resultados por tamaño del archivo
      */
     private void SortBySize(){
-        SearchBar.resultsList = radixSort(SearchBar.resultsList);
-        for(int i=0; i<SearchBar.resultsList.getSize();i++){
-            System.out.println(SearchBar.resultsList.getElement(i).file.getName());
+        Search.resultsList = radixSort(Search.resultsList);
+        for(int i = 0; i< Search.resultsList.getSize(); i++){
+            System.out.println(Search.resultsList.getElement(i).file.getName());
         }
-        SearchBar.updatePositions();
+        Search.updatePositions();
     }
 
 
