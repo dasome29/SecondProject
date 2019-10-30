@@ -148,9 +148,10 @@ public class Results {
                 String[] line = text.getElement(Index + x);
                 if (Index + x == Index) {
                     setHightLight(line, word);
-                    if (index.contains(Index + 1) && Index +1 != text.getSize()-1) {
+                    if (index.contains(Index + 1) && Index +1  != text.getSize()-1) {
                         setHightLight(text.getElement(Index + 1), word);
                         i++;
+                        break;
                     }
                 } else {
                     for (int j = 0; j < line.length; j++) {
@@ -207,6 +208,7 @@ public class Results {
                         if(searchPhrase(text.getElement(i+1), phase)){
                             setHightLight(text.getElement(i+1));
                             i++;
+                            break;
                         }
                     }
                     else{
