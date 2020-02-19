@@ -44,14 +44,14 @@ class Results {
     }
 
 
-    Results(Pane searchingResultsPane, File file, int posy) {
+    Results(Pane searchingResultsPane, File file,String word,  int posy) {
         this.searchingResultsPane = searchingResultsPane;
         this.file = file;
         this.posy = posy;
         this.FileSize = (int) file.length();
 
         setResultPane();
-        //addTextWord(word);
+        addTextWord(word);
 
 
     }

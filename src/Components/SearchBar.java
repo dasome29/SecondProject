@@ -174,7 +174,7 @@ public class SearchBar{
         searchingResultsPane.getChildren().clear();
         for(int i=0; i< listOfWords.getSize(); i++){
             File file = listOfWords.getElement(i);
-            Results results=  new Results(searchingResultsPane, file, posy );
+            Results results=  new Results(searchingResultsPane, file, word, posy );
             resultsList.addLast(results);
             posy += 280;
             if(posy > searchingResultsPane.getHeight()){
